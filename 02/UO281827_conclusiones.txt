@@ -1,0 +1,50 @@
+Tras la realización de la práctica 2, he concluido que la diferencia entre un algoritmo secuencial y uno paralelo se mide generalmente en un nivel de magnitud. Esto es, si observamos las fases 1 a 3 (secuenciales) y 4 a 7 (paralelas), podríamos observar la siguiente diferencia:
+	FASE 1: 1.2786102E-01
+	FASE 2: 1.2742305E-01
+	FASE 3: 1.2566614E-01
+
+	FASE 4: 4.1118860E-02
+	FASE 5: 3.2191992E-02
+	FASE 6: 2.8620958E-02
+	FASE 7: 2.8427839E-02
+Todas las mediciones secuenciales son E-01 mientras que las paralelas se reducen an E-02, pero no hay diferencias de magnitudes dentro de las fases paralelas o secuenciales.
+
+Entre diferentes máquinas se pueden observar diferencias para el mismo algoritmo.
+ColaGPU LowGcc:			ColaGPU FastIcc:
+	FASE 1: 1.2660027E-03		FASE 1: 8.0704689E-04
+	FASE 2: 1.2631416E-03		FASE 2: 1.8787384E-04
+	FASE 3: 1.2509823E-03		FASE 3: 2.9110909E-04
+
+	FASE 4: 4.7588348E-04		FASE 4: 1.2259483E-03
+	FASE 5: 3.4093857E-04		FASE 5: 7.2002411E-05
+	FASE 6: 3.2114983E-04		FASE 6: 6.3896179E-05
+	FASE 7: 3.2305717E-04		FASE 7: 2.2196770E-04
+
+ColaI3 LowGcc:			ColaI3 FastIcc:
+	FASE 1: 2.0000935E-03		FASE 1: 1.1370182E-03
+	FASE 2: 1.6429424E-03		FASE 2: 5.6600571E-04
+	FASE 3: 1.6171932E-03		FASE 3: 5.3596497E-04
+
+	FASE 4: 5.9738159E-03		FASE 4: 4.7492981E-04
+	FASE 5: 5.2669048E-03		FASE 5: 4.4083595E-04
+	FASE 6: 5.2680969E-03		FASE 6: 4.4298172E-04
+	FASE 7: 5.2440166E-03		FASE 7: 4.2319298E-04
+
+ColaXeon LowGcc:		ColaXeon FastIcc:
+	FASE 1: 3.8378239E-03		FASE 1: 1.0840839E-03
+	FASE 2: 2.9830933E-03		FASE 2: 3.1900406E-04
+	FASE 3: 2.9699802E-03		FASE 3: 8.5020065E-04
+
+	FASE 4: 1.2450218E-03		FASE 4: 3.4308434E-04
+	FASE 5: 6.5088272E-04		FASE 5: 4.3869019E-05
+	FASE 6: 6.5612793E-04		FASE 6: 3.9100647E-05
+	FASE 7: 8.2588196E-04		FASE 7: 2.8800964E-04
+
+Se puede observar que dentro de un mismo equipo, lo compilado por FastIcc es más rápido que LowGcc. En algunos casos, llegando a E-05.
+
+También analizamos que todos tardan más en hacer la reducción de forma paralela que secuencial (Muestras del I3).
+Tamaño: 1000 500 2121 (SlowGcc):		Tamaño: 10000 10000 2121 (SlowGcc):
+	FASE 8: 3.0994415E-06 (Secuencial)		FASE 8: 3.0994415E-05 (Secuencial)
+	FASE 9: 3.3330917E-03 (Paralela)		FASE 9: 1.7166138E-05 (Paralela)
+
+Sin embargo, al aumentar el tamaño, el tiempo paralelo es mejor que el secuencial.

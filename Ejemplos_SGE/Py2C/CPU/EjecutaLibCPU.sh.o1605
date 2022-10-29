@@ -1,0 +1,4 @@
+rm -f *~ *.o core
+rm -f LibCPU.so
+gcc -Wall -O3 -fPIC -shared LibCPU.c -o LibCPU.so
+El error es 0.0

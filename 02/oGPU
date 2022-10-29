@@ -1,0 +1,841 @@
+icc -o EXE/PRAC02SlowIcc PRAC02.c Funciones.c -w2 -O0 -qopenmp -lm -qmkl=parallel
+icc -o EXE/PRAC02FastIcc PRAC02.c Funciones.c -w2 -O3 -qopenmp -lm -qmkl=parallel
+gcc -o EXE/PRAC02SlowGcc PRAC02.c Funciones.c -Wall -O0 -fopenmp -Wno-unused-variable -L/opt/openblas/lib -lopenblas -lm
+gcc -o EXE/PRAC02FastGcc PRAC02.c Funciones.c -Wall -O3 -fopenmp -Wno-unused-variable -L/opt/openblas/lib -lopenblas -lm
+Compilado 
+Ejecutando PRAC02SlowGcc con 1000 500 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.0081482E-05 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2660027E-03 sec. Error 8.09532E-14.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2631416E-03 sec. Error 8.09532E-14.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2509823E-03 sec. Error 8.09532E-14.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.7588348E-04 sec. Error 8.09532E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.4093857E-04 sec. Error 8.09532E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2114983E-04 sec. Error 8.09532E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2305717E-04 sec. Error 8.09532E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.9073486E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.0531158E-06 sec. Error 7.27596E-14.
+Ejecutando PRAC02SlowGcc con 500 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   5.8889389E-05 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2710094E-03 sec. Error 2.13265E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2638569E-03 sec. Error 2.13265E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2631416E-03 sec. Error 2.13265E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.8208237E-04 sec. Error 2.13265E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.4499168E-04 sec. Error 2.13265E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2591820E-04 sec. Error 2.13265E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2496452E-04 sec. Error 2.13265E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.1920929E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.8146973E-06 sec. Error 1.16415E-13.
+Ejecutando PRAC02SlowGcc con 1000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.9598007E-04 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 2.5680065E-03 sec. Error 2.09619E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 2.5360584E-03 sec. Error 2.09619E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  2.5258064E-03 sec. Error 2.09619E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 8.9192390E-04 sec. Error 2.09619E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  6.4587593E-04 sec. Error 2.09619E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   6.4301491E-04 sec. Error 2.09619E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  6.4897537E-04 sec. Error 2.09619E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.1457672E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.0531158E-06 sec. Error 1.45519E-13.
+Ejecutando PRAC02SlowGcc con 5000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.6739368E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2857914E-02 sec. Error 2.11515E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2798071E-02 sec. Error 2.11515E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2709856E-02 sec. Error 2.11515E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.9861202E-03 sec. Error 2.11515E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.2219887E-03 sec. Error 2.11515E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2269955E-03 sec. Error 2.11515E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2110214E-03 sec. Error 2.11515E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.2874603E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   8.1062317E-06 sec. Error 2.32831E-13.
+Ejecutando PRAC02SlowGcc con 1000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.6698837E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2861967E-02 sec. Error 2.54702E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2787104E-02 sec. Error 2.54702E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2754917E-02 sec. Error 2.54702E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.5831203E-03 sec. Error 2.54702E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.7670135E-03 sec. Error 2.54702E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.7760735E-03 sec. Error 2.54702E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.7539005E-03 sec. Error 2.54702E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.8610229E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   5.0067902E-06 sec. Error 9.31323E-13.
+Ejecutando PRAC02SlowGcc con 5000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.2851906E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 6.4204216E-02 sec. Error 2.55020E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 6.3855886E-02 sec. Error 2.55020E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  6.2999010E-02 sec. Error 2.55020E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.8123150E-02 sec. Error 2.55020E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.8840075E-02 sec. Error 2.55020E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.8351793E-02 sec. Error 2.55020E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.4174938E-02 sec. Error 2.55020E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.3113022E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   6.9141388E-06 sec. Error 1.67638E-12.
+Ejecutando PRAC02SlowGcc con 10000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1996984E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2795901E-01 sec. Error 2.55079E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2741399E-01 sec. Error 2.55079E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2570000E-01 sec. Error 2.55079E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.2938948E-02 sec. Error 2.55079E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.5470963E-02 sec. Error 2.55079E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.6448011E-02 sec. Error 2.55079E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.8545856E-02 sec. Error 2.55079E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.1948090E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.0013580E-05 sec. Error 3.72529E-12.
+Ejecutando PRAC02SlowGcc con 5000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1733055E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2794590E-01 sec. Error 7.18913E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2671494E-01 sec. Error 7.18913E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2600613E-01 sec. Error 7.18913E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.4347048E-02 sec. Error 7.18913E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.3555031E-02 sec. Error 7.18913E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.8593063E-02 sec. Error 7.18913E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.8628111E-02 sec. Error 7.18913E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.5020370E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   5.9604645E-06 sec. Error 1.04308E-11.
+Ejecutando PRAC02SlowGcc con 10000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.2984028E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 2.5592303E-01 sec. Error 7.16017E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 2.5451398E-01 sec. Error 7.16017E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  2.5160193E-01 sec. Error 7.16017E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 7.5212955E-02 sec. Error 7.16017E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.0779104E-02 sec. Error 7.16017E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   4.1351080E-02 sec. Error 7.16017E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.3326864E-02 sec. Error 7.16017E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.5987625E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   6.9141388E-06 sec. Error 8.56817E-12.
+Ejecutando PRAC02SlowGcc con 16000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.6638975E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.0944600E-01 sec. Error 7.21358E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 4.0725613E-01 sec. Error 7.21358E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  4.0288115E-01 sec. Error 7.21358E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.1794496E-01 sec. Error 7.21358E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.2420835E-02 sec. Error 7.21358E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.3967953E-02 sec. Error 7.21358E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.3527117E-02 sec. Error 7.21358E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 4.2915344E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   8.8214874E-06 sec. Error 8.84756E-12.
+Ejecutando PRAC02SlowGcc con 10000 16000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.7652016E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.0910888E-01 sec. Error 1.24407E-11.
+Tiempo FASE 2: Secuencial con variables auxiliares 4.0630198E-01 sec. Error 1.24407E-11.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  4.0272093E-01 sec. Error 1.24407E-11.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.1417794E-01 sec. Error 1.24407E-11.
+Tiempo FASE 5: Paralelo con auxiliares globales  6.7291021E-02 sec. Error 1.24407E-11.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.4277897E-02 sec. Error 1.24407E-11.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.3428173E-02 sec. Error 1.24407E-11.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.5987625E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   7.1525574E-06 sec. Error 1.56462E-11.
+Ejecutando PRAC02SlowIcc con 1000 500 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.7868023E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.3759136E-03 sec. Error 9.13472E-14.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2929440E-03 sec. Error 9.13472E-14.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2991428E-03 sec. Error 9.13472E-14.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 7.9860687E-03 sec. Error 9.13472E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  2.0503998E-04 sec. Error 9.13472E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.8310547E-04 sec. Error 9.13472E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.6617775E-04 sec. Error 9.13472E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.0994415E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.5020370E-05 sec. Error 7.27596E-14.
+Ejecutando PRAC02SlowIcc con 500 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.0161400E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.4021397E-03 sec. Error 2.36683E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2850761E-03 sec. Error 2.36683E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2848377E-03 sec. Error 2.36683E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.0490417E-03 sec. Error 2.36683E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  2.0194054E-04 sec. Error 2.36683E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.0003319E-04 sec. Error 2.36683E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.5892258E-04 sec. Error 2.36683E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 9.5367432E-07 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.2159348E-05 sec. Error 8.73115E-14.
+Ejecutando PRAC02SlowIcc con 1000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.8160343E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.6608448E-03 sec. Error 2.31955E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 4.6579838E-03 sec. Error 2.31955E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  4.6579838E-03 sec. Error 2.31955E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.6779900E-03 sec. Error 2.31955E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.6600571E-04 sec. Error 2.31955E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.6886673E-04 sec. Error 2.31955E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.6600571E-04 sec. Error 2.31955E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.8146973E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.8835068E-05 sec. Error 1.45519E-13.
+Ejecutando PRAC02SlowIcc con 5000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.8269291E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2909889E-02 sec. Error 2.40468E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2809992E-02 sec. Error 2.40468E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2763023E-02 sec. Error 2.40468E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 4.4400692E-03 sec. Error 2.40468E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.7491322E-03 sec. Error 2.40468E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.7410259E-03 sec. Error 2.40468E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.7331581E-03 sec. Error 2.40468E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.5987625E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.7894974E-05 sec. Error 2.32831E-13.
+Ejecutando PRAC02SlowIcc con 1000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.5680065E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2903929E-02 sec. Error 3.09973E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2829065E-02 sec. Error 3.09973E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2756109E-02 sec. Error 3.09973E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 7.2679520E-03 sec. Error 3.09973E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.2100677E-03 sec. Error 3.09973E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2129288E-03 sec. Error 3.09973E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2269955E-03 sec. Error 3.09973E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 4.0531158E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.1934509E-05 sec. Error 9.31323E-13.
+Ejecutando PRAC02SlowIcc con 5000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.6781044E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 6.4319134E-02 sec. Error 3.10574E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 6.4056158E-02 sec. Error 3.10574E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  6.3523054E-02 sec. Error 3.10574E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 2.0586014E-02 sec. Error 3.10574E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.6081810E-02 sec. Error 3.10574E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.6089916E-02 sec. Error 3.10574E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.5248060E-02 sec. Error 3.10574E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.2172928E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.6001205E-05 sec. Error 2.04891E-12.
+Ejecutando PRAC02SlowIcc con 10000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1835098E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.4103603E-01 sec. Error 3.10980E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2763500E-01 sec. Error 3.10980E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2700486E-01 sec. Error 3.10980E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.5562038E-02 sec. Error 3.10980E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.1824827E-02 sec. Error 3.10980E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.8440952E-02 sec. Error 3.10980E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.8413057E-02 sec. Error 3.10980E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 4.6014786E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.6954880E-05 sec. Error 3.91155E-12.
+Ejecutando PRAC02SlowIcc con 5000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1686087E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.2788701E-01 sec. Error 8.74327E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.2758017E-01 sec. Error 8.74327E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.2696004E-01 sec. Error 8.74327E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.5773993E-02 sec. Error 8.74327E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.2462120E-02 sec. Error 8.74327E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.1028032E-02 sec. Error 8.74327E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.8434992E-02 sec. Error 8.74327E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.2888184E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.8848648E-05 sec. Error 1.04308E-11.
+Ejecutando PRAC02SlowIcc con 10000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.1818161E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 2.5586200E-01 sec. Error 8.72567E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 2.5516987E-01 sec. Error 8.72567E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  2.5410104E-01 sec. Error 8.72567E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 7.1871042E-02 sec. Error 8.72567E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.9287071E-02 sec. Error 8.72567E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   4.9967051E-02 sec. Error 8.72567E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.3059120E-02 sec. Error 8.72567E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.5987625E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.9802322E-05 sec. Error 8.56817E-12.
+Ejecutando PRAC02SlowIcc con 16000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.4765959E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.0950608E-01 sec. Error 8.77667E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 4.0821600E-01 sec. Error 8.77667E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  4.0616703E-01 sec. Error 8.77667E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.1874986E-01 sec. Error 8.77667E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.2170973E-02 sec. Error 8.77667E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.3641081E-02 sec. Error 8.77667E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.2978992E-02 sec. Error 8.77667E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 4.1961670E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.9815903E-05 sec. Error 8.84756E-12.
+Ejecutando PRAC02SlowIcc con 10000 16000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.7392139E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.0949106E-01 sec. Error 1.52691E-11.
+Tiempo FASE 2: Secuencial con variables auxiliares 4.0823793E-01 sec. Error 1.52691E-11.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  4.0642881E-01 sec. Error 1.52691E-11.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.0947394E-01 sec. Error 1.52691E-11.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.9243898E-02 sec. Error 1.52691E-11.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.3793907E-02 sec. Error 1.52691E-11.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.3076029E-02 sec. Error 1.52691E-11.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.6941299E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.9087067E-05 sec. Error 1.49012E-11.
+Ejecutando PRAC02FastGcc con 1000 500 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   8.1062317E-05 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.4499168E-04 sec. Error 8.09532E-14.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.3593178E-04 sec. Error 8.09532E-14.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.4117699E-04 sec. Error 8.09532E-14.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.7905235E-04 sec. Error 8.09532E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.2928925E-05 sec. Error 8.09532E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.2928925E-05 sec. Error 8.09532E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  8.4161758E-05 sec. Error 8.09532E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.9073486E-06 sec. Error 7.27596E-14.
+Ejecutando PRAC02FastGcc con 500 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.4849854E-05 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.4999847E-04 sec. Error 2.13265E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.4904480E-04 sec. Error 2.13265E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.4284592E-04 sec. Error 2.13265E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.5997887E-04 sec. Error 2.13265E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.6028366E-05 sec. Error 2.13265E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.6028366E-05 sec. Error 2.13265E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  8.6069107E-05 sec. Error 2.13265E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.9073486E-06 sec. Error 1.16415E-13.
+Ejecutando PRAC02FastGcc con 1000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.9407272E-04 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 7.2097778E-04 sec. Error 2.09619E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 6.9403648E-04 sec. Error 2.09619E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  6.9785118E-04 sec. Error 2.09619E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 2.6583672E-04 sec. Error 2.09619E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.0800362E-04 sec. Error 2.09619E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.0800362E-04 sec. Error 2.09619E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.6307831E-04 sec. Error 2.09619E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.9073486E-06 sec. Error 1.45519E-13.
+Ejecutando PRAC02FastGcc con 5000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.6479492E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6721230E-03 sec. Error 2.11515E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.5750866E-03 sec. Error 2.11515E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.5510063E-03 sec. Error 2.11515E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.2159348E-03 sec. Error 2.11515E-13.
+Tiempo FASE 5: Paralelo con auxiliares globales  8.3613396E-04 sec. Error 2.11515E-13.
+Tiempo FASE 6: Paralelo con auxiliares locales   7.9488754E-04 sec. Error 2.11515E-13.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.0821819E-03 sec. Error 2.11515E-13.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.8146973E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.0531158E-06 sec. Error 2.79397E-13.
+Ejecutando PRAC02FastGcc con 1000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.6739368E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6919117E-03 sec. Error 2.54702E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.6001205E-03 sec. Error 2.54702E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.5629272E-03 sec. Error 2.54702E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.1739731E-03 sec. Error 2.54702E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  8.9287758E-04 sec. Error 2.54702E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   8.8095665E-04 sec. Error 2.54702E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.0988712E-03 sec. Error 2.54702E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 9.5367432E-07 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.0994415E-06 sec. Error 9.31323E-13.
+Ejecutando PRAC02FastGcc con 5000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.2658787E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.8338919E-02 sec. Error 2.55020E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.7886877E-02 sec. Error 2.55020E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.7815828E-02 sec. Error 2.55020E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 5.3448677E-03 sec. Error 2.55020E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.1209927E-03 sec. Error 2.55020E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.3808689E-03 sec. Error 2.55020E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.4569244E-03 sec. Error 2.55020E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.8146973E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   5.0067902E-06 sec. Error 1.86265E-12.
+Ejecutando PRAC02FastGcc con 10000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.2079954E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6534071E-02 sec. Error 2.55079E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.5598040E-02 sec. Error 2.55079E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.5441160E-02 sec. Error 2.55079E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.1581898E-02 sec. Error 2.55079E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.1211157E-02 sec. Error 2.55079E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.0264874E-02 sec. Error 2.55079E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.0309935E-02 sec. Error 2.55079E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 8.1062317E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.8146973E-06 sec. Error 3.72529E-12.
+Ejecutando PRAC02FastGcc con 5000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1750937E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6717892E-02 sec. Error 7.18913E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.5753012E-02 sec. Error 7.18913E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.5556078E-02 sec. Error 7.18913E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.0717869E-02 sec. Error 7.18913E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.0291100E-02 sec. Error 7.18913E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.0302067E-02 sec. Error 7.18913E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.0271072E-02 sec. Error 7.18913E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 2.8610229E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.0994415E-06 sec. Error 1.04308E-11.
+Ejecutando PRAC02FastGcc con 10000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.2967100E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 7.3174000E-02 sec. Error 7.16017E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 7.1381092E-02 sec. Error 7.16017E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  7.1058035E-02 sec. Error 7.16017E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 2.1075964E-02 sec. Error 7.16017E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  2.0223856E-02 sec. Error 7.16017E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.0066977E-02 sec. Error 7.16017E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.9940853E-02 sec. Error 7.16017E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 6.9141388E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.0531158E-06 sec. Error 8.19564E-12.
+Ejecutando PRAC02FastGcc con 16000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.6448956E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.1722088E-01 sec. Error 7.21358E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.1424899E-01 sec. Error 7.21358E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.1364698E-01 sec. Error 7.21358E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.3542871E-02 sec. Error 7.21358E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.2860041E-02 sec. Error 7.21358E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2279968E-02 sec. Error 7.21358E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2242060E-02 sec. Error 7.21358E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.0967255E-05 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   5.0067902E-06 sec. Error 8.84756E-12.
+Ejecutando PRAC02FastGcc con 10000 16000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.7398100E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.1716390E-01 sec. Error 1.24407E-11.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.1433196E-01 sec. Error 1.24407E-11.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.1378193E-01 sec. Error 1.24407E-11.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.3650875E-02 sec. Error 1.24407E-11.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.2872915E-02 sec. Error 1.24407E-11.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.2155037E-02 sec. Error 1.24407E-11.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.2065153E-02 sec. Error 1.24407E-11.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 9.0599060E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.0531158E-06 sec. Error 1.56462E-11.
+Ejecutando PRAC02FastIcc con 1000 500 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.0271072E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.3296814E-04 sec. Error 9.13472E-14.
+Tiempo FASE 2: Secuencial con variables auxiliares 7.9870224E-05 sec. Error 4.21897E-14.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  8.4161758E-05 sec. Error 4.21897E-14.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 9.7393990E-04 sec. Error 3.63059E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.7881393E-05 sec. Error 3.63059E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.5974045E-05 sec. Error 3.63059E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  8.3923340E-05 sec. Error 3.63059E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.0967255E-05 sec. Error 0.00000E+00.
+Ejecutando PRAC02FastIcc con 500 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.0128021E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 4.0388107E-04 sec. Error 2.36683E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 7.2002411E-05 sec. Error 1.02971E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  6.7949295E-05 sec. Error 1.02971E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.9450188E-03 sec. Error 8.76293E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  2.2888184E-05 sec. Error 8.76293E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.0980835E-05 sec. Error 8.76293E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  8.2969666E-05 sec. Error 8.76293E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   1.2874603E-05 sec. Error 8.73115E-14.
+Ejecutando PRAC02FastIcc con 1000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.2829304E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 8.0704689E-04 sec. Error 2.31955E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.8787384E-04 sec. Error 1.08551E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  2.9110909E-04 sec. Error 1.08551E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.2259483E-03 sec. Error 9.34724E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.2002411E-05 sec. Error 9.34724E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   6.3896179E-05 sec. Error 9.34724E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.2196770E-04 sec. Error 9.34724E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 0.0000000E+00 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   4.1007996E-05 sec. Error 0.00000E+00.
+Ejecutando PRAC02FastIcc con 5000 1000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.8328896E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.7348270E-03 sec. Error 2.40468E-13.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.6698837E-03 sec. Error 1.08990E-13.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.6331673E-03 sec. Error 1.08990E-13.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 9.2539787E-03 sec. Error 8.89695E-14.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.6699257E-04 sec. Error 8.89695E-14.
+Tiempo FASE 6: Paralelo con auxiliares locales   7.7199936E-04 sec. Error 8.89695E-14.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.2350082E-03 sec. Error 8.89695E-14.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.9073486E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   7.9107285E-04 sec. Error 4.65661E-14.
+Ejecutando PRAC02FastIcc con 1000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.5949478E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.7109852E-03 sec. Error 3.09973E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.6920567E-03 sec. Error 1.33561E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.6558170E-03 sec. Error 1.33561E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 2.2749901E-03 sec. Error 1.07408E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  7.3885918E-04 sec. Error 1.07408E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.9700012E-04 sec. Error 1.07408E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.1770725E-03 sec. Error 1.07408E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 9.5367432E-07 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.9087067E-05 sec. Error 2.32831E-13.
+Ejecutando PRAC02FastIcc con 5000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   6.6950321E-03 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.8349171E-02 sec. Error 3.10574E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 8.3389282E-03 sec. Error 1.36025E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  8.0947876E-03 sec. Error 1.36025E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.6793013E-02 sec. Error 1.09123E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  5.7699680E-03 sec. Error 1.09123E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   5.7690144E-03 sec. Error 1.09123E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  5.7020187E-03 sec. Error 1.09123E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.9073486E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.5047531E-05 sec. Error 5.58794E-13.
+Ejecutando PRAC02FastIcc con 10000 5000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1797905E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6610842E-02 sec. Error 3.10980E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.6565084E-02 sec. Error 1.36550E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.6127110E-02 sec. Error 1.36550E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.9682169E-02 sec. Error 1.11326E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.1478186E-02 sec. Error 1.11326E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.1436939E-02 sec. Error 1.11326E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.1430025E-02 sec. Error 1.11326E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.8146973E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.0994415E-05 sec. Error 3.72529E-13.
+Ejecutando PRAC02FastIcc con 5000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   1.1733055E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 3.6502123E-02 sec. Error 8.74327E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 1.6566038E-02 sec. Error 3.84614E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  1.6108990E-02 sec. Error 3.84614E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 1.4054060E-02 sec. Error 3.11017E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  1.1260986E-02 sec. Error 3.11017E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   1.1219978E-02 sec. Error 3.11017E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  1.1190891E-02 sec. Error 3.11017E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 1.9073486E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.9087067E-05 sec. Error 7.45058E-13.
+Ejecutando PRAC02FastIcc con 10000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   2.1841049E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 7.3243856E-02 sec. Error 8.72567E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 3.3090115E-02 sec. Error 3.85042E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  3.2231092E-02 sec. Error 3.85042E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 2.3441792E-02 sec. Error 3.12771E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  2.2285938E-02 sec. Error 3.12771E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   2.2326946E-02 sec. Error 3.12771E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  2.2330999E-02 sec. Error 3.12771E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 4.0531158E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   2.2172928E-05 sec. Error 3.72529E-13.
+Ejecutando PRAC02FastIcc con 16000 10000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.4644127E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.1696815E-01 sec. Error 8.77667E-12.
+Tiempo FASE 2: Secuencial con variables auxiliares 5.2973032E-02 sec. Error 3.83293E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  5.1596165E-02 sec. Error 3.83293E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.6935091E-02 sec. Error 3.11255E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.5708904E-02 sec. Error 3.11255E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.5579920E-02 sec. Error 3.11255E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.5739899E-02 sec. Error 3.11255E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 6.1988831E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.0994415E-05 sec. Error 4.65661E-13.
+Ejecutando PRAC02FastIcc con 10000 16000 2121
+
+
+Tiempo FASE 0: Con librerias de alto rendimiento   3.7468910E-02 sec.
+
+
+Tiempo FASE 1: Secuencial sin variables auxiliares 1.1715007E-01 sec. Error 1.52691E-11.
+Tiempo FASE 2: Secuencial con variables auxiliares 5.2955866E-02 sec. Error 6.80306E-12.
+Tiempo FASE 3: Secuencial Matriz con 1D Row-Major  5.1540852E-02 sec. Error 6.80306E-12.
+
+
+Tiempo FASE 4: Paralelo sin variables auxiliares 3.8642883E-02 sec. Error 5.51089E-12.
+Tiempo FASE 5: Paralelo con auxiliares globales  3.6570072E-02 sec. Error 5.51089E-12.
+Tiempo FASE 6: Paralelo con auxiliares locales   3.6483049E-02 sec. Error 5.51089E-12.
+Tiempo FASE 7: Paralelo Matriz con 1D Row-Major  3.6612988E-02 sec. Error 5.51089E-12.
+
+
+Tiempo FASE 8: Operador de reducción en secuencial 3.0994415E-06 sec.
+Tiempo FASE 9: Operador de reducción en paralelo   3.1948090E-05 sec. Error 1.49012E-12.
