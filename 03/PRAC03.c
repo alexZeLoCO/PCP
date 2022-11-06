@@ -149,7 +149,7 @@ double* MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int ld
 
 void blockDGEMM (int n, int blk, int ld, double alpha, double *A, double *B, double *C, int blk_column, int blk_row)
 {
-	int i, j, k, total_size = n*n, blk_column_start = blk_column * blk * ld, blk_row_start blk_row * blk;
+	int i, j, k, total_size = n*n, blk_column_start = blk_column * blk * ld, blk_row_start = blk_row * blk;
 	double tmp;
 	for (i = 0 ; i < blk ; i++) // i = idx col 
 	{
