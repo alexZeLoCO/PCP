@@ -123,7 +123,7 @@ double* tspTask (int m, int k, double* A)
 }
 
 // --- PRODUCTO MATRICIAL T --- PARALLEL TASK ---
-double* MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc)
+double MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc)
 {
 	double tmp;
 	int i, j, p;
@@ -144,7 +144,7 @@ double* MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int ld
 			*(C+j*ldc+i) += alpha * tmp;
 		}	
 	}
-	return C;
+	return 0;
 }
 
 void blockDGEMM (int n, int blk, int ld, double alpha, double *A, double *B, double *C, int blk_column, int blk_row)
