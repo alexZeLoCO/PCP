@@ -179,7 +179,7 @@ double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda
 	{
 		for (j = 0 ; j < n_blocks_row ; j++)
 		{
-			blockDGEMM (n, blk, ldc, alpha, A, B, C, i, j);
+			blockDGEMM (n, blk, ldc, alpha, A, B, C+j*blk+i*blk*ldc, i, j);
 		}
 	}
 	
