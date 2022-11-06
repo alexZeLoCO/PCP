@@ -156,7 +156,7 @@ void blockDGEMM (int n, int blk, int ld, double alpha, double *A, double *B, dou
 		for (j = 0 ; j < blk ; j++) // j = idx fil 
 		{
 			tmp = 0.0;
-			for (k = 0 ; k < total_size ; k++)
+			for (k = 0 ; k < n ; k++)
 				tmp+= *(A+k+(i+blk_column_start)*ld) * *(B+j+blk_row_start+k*ld);
 
 			*(C+j+i*ld) += alpha * tmp;
@@ -173,16 +173,8 @@ double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda
 		// C[i] = beta * C[i];
 		*(C+i) = beta * *(C+i);
 
-/*
-	// T
-	for (i = 0 ; i < n ; i++)
-	{
-		for (j = i+1 ; j<n ; j++)
-			// A[i*lda+j] = A[j*lda+i];
-			*(A+i*lda+j) = *(A+j*lda+i);
-	}
-*/
 	A = tsp (m, k, A);
+
 	for (i = 0 ; i < n_blocks_row ; i++)
 	{
 		for (j = 0 ; j < n_blocks_row ; j++)
