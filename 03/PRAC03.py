@@ -13,8 +13,8 @@ LibIccO3 = ctypes.cdll.LoadLibrary('LIBS/PRACIccO3.so')
 
 # GccO0 = LibGccO0.MyDGEMM
 # GccO3 = LibGccO3.MyDGEMM
-IccO0 = LibIccO0.MyDGEMM
-IccO3 = LibIccO3.MyDGEMM
+IccO0 = LibIccO0.MyDGEMMT
+IccO3 = LibIccO3.MyDGEMMT
 
 # GccO0.restype = ctypes.c_double
 # GccO3.restype = ctypes.c_double
