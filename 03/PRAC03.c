@@ -85,7 +85,7 @@ double* tspFor (int m, int k, double* A)
 }
 
 // --- PRODUCTO MATRICIAL T --- PARALLEL FOR ---
-double* MyDGEMM (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc)
+double MyDGEMM (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc)
 {
 	double tmp;
 	int i, j, p;
@@ -104,7 +104,7 @@ double* MyDGEMM (int tipo, int m, int n, int k, double alpha, double *A, int lda
 			*(C+j*ldc+i) += alpha * tmp;
 		}	
 	}
-	return C;
+	return 0;
 }
 
 double* tspTask (int m, int k, double* A)
