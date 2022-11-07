@@ -1,0 +1,32 @@
+icc -o LIBS/PRACIccO0.so -qopenmp -fPIC -shared -w2 -O0 PRAC03.c
+icc -o LIBS/PRACIccO3.so -qopenmp -fPIC -shared -w2 -O3 PRAC03.c
+Python 200x200x200 Segundos=9.42588E-04
+IccO0  200x200x200 Segundos=3.13306E-02 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO0 2.26335E+05
+IccO3  200x200x200 Segundos=2.10145E-03 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO3 2.26335E+05
+
+Python 250x250x250 Segundos=1.09556E-03
+IccO0  250x250x250 Segundos=5.79516E-02 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO0 1.05125E+05
+IccO3  250x250x250 Segundos=4.04149E-03 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO3 1.05125E+05
+
+Python 300x300x300 Segundos=1.83761E-03
+IccO0  300x300x300 Segundos=9.98329E-02 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO0 4.98113E+04
+IccO3  300x300x300 Segundos=7.41259E-03 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO3 4.98113E+04
+
+Python 350x350x350 Segundos=2.84868E-03
+IccO0  350x350x350 Segundos=1.58163E-01 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO0 2.00667E+04
+IccO3  350x350x350 Segundos=1.29113E-02 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO3 2.00667E+04
+
+Python 400x400x400 Segundos=3.81589E-03
+IccO0  400x400x400 Segundos=2.35300E-01 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO0 6.25256E+03
+IccO3  400x400x400 Segundos=1.97350E-02 (Segundos medidos en C=0.00000E+00)
+Error entre Python y IccO3 6.25256E+03
+

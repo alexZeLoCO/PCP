@@ -1,0 +1,17 @@
+z   = u+vi
+z^2 = (u+vi) * (u+vi) = u^2 + 2*u*vi + (vi)^2 = u^2 + 2*u*vi - v^2 ==> Parte real: u^2-v, Parte imaginaria: 2*u*v
+
+x_res = resolucion en el eje X (n_pixeles) != posiciones_matriz
+y_res = resolucion en el eje Y (n_pixeles) != posiciones_matriz
+
+x_min = x de punta superior izquierda del cuadrado a representar
+y_min = y de punta superior izquierda del cuadrado a representar
+x_max = x de punta inferior derecha del cuadrado a representar
+y_max = y de punta inferior derecha del cuadrado a representar
+
+dx = (x_max-x_min)/x_res
+dy = (y_max-y_min)/y_res
+
+Matriz	= Complejo
+Matriz	= C(Real, Imaginario)
+M(i, j) = C(x_min+col*dx, y_min+row*dy)

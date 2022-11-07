@@ -147,24 +147,48 @@ double MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int lda
 	return 0;
 }
 
-void blockDGEMM (int n, int blk, int ld, double alpha, double *A, double *B, double *C, int blk_column, int blk_row)
+void blockDGEMM (int blk, int ld, double alpha, double *A, double *B, double *C, int blk_column, int blk_row)
 {
 	int i, j, k,
-	    total_size = n*n,
 	    blk_column_start = blk_column * blk * ld,
 	    blk_row_start = blk_row * blk;
 	double tmp;
+	for (i = 0 ; i < blk ; i++) {	// fil
+		for (j = 0 ; j < blk ; j++) { // col
+			tmp = 0.0;
+			for (k = 0 ; k < ld ; k++) { // col A y fil B
+				// tmp += A[i][p] * B[p][i]
+				tmp+=*(A+i*ld+k) * *(B+j*ld+k);
+			}
+			// C[i][j] += alpha * tmp;
+			*(C+j*ld+i) += alpha * tmp;
+		}	
+	}
+	/*
 	for (i = 0 ; i < blk ; i++) // i = idx col 
 	{
 		for (j = 0 ; j < blk ; j++) // j = idx fil 
 		{
 			tmp = 0.0;
-			for (k = 0 ; k < n ; k++)
-				// tmp+= *(A+k+(i+blk_column_start)*ld) * *(B+j+blk_row_start+k*ld);
+			// Al operar *(C+j+i*ld), uso fila j de A (k es columnas) y columna i de B (k es filas)
+			for (k = 0 ; k < ld ; k++)
+			{
+				// tmp+= *(A+k+i*ld+blk_row_start) * *(B+j+k*ld+blk_column_start); // E+03
+				// tmp+= *(A+i+k*ld+blk_row_start) * *(B+k+j*ld+blk_column_start); // E+03
+				// tmp+= *(A+k+j*ld+blk_row_start) * *(B+i+k*ld+blk_column_start); // E+03
+				// tmp+= *(A+j+k*ld+blk_row_start) * *(B+k+i*ld+blk_column_start); // E+03
+
+				tmp+= *(A+j*ld+k) * *(B+k+i*ld);
+
+				// tmp+= *(A+k+i*ld+blk_column_start) * *(B+j+k*ld+blk_row_start); // E+03
+				// tmp+= *(A+i+k*ld+blk_column_start) * *(B+k+j*ld+blk_row_start); // SIGSEGV
+				// tmp+= *(A+k+j*ld+blk_column_start) * *(B+i+k*ld+blk_row_start); // E+03
+				// tmp+= *(A+j+k*ld+blk_column_start) * *(B+k+i*ld+blk_row_start); // SIGSEGV
+			}
 
 			*(C+j+i*ld) += alpha * tmp;
 		}	
-	}
+	}*/
 }
 
 double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc, int blk)
@@ -182,7 +206,7 @@ double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda
 	{
 		for (j = 0 ; j < n_blocks_row ; j++)
 		{
-			blockDGEMM (n, blk, ldc, alpha, A, B, C+j*blk+i*blk*ldc, i, j);
+			blockDGEMM (blk, ldc, alpha, A+j*blk, B+i*blk*ldc, C+j*blk+i*blk*ldc, i, j);
 		}
 	}
 	
