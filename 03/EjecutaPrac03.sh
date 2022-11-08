@@ -3,7 +3,7 @@
 #$ -S /bin/sh
 #
 # 1.- Compilar usando fichero MakefileMKL en el nodo destino (de ejecucion)
-make
+# make
 
 # 2.- Comprobando que las librerias existan (la compilacion fue correcta)
 # if [ ! -x LIBS/PRACGccO0.so ]; then

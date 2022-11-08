@@ -53,7 +53,7 @@ double* pmT (int m, int n, int k, double alpha, double *A, int lda, double *B, i
 {
 	double tmp;
 	int i, j, p;
-	A = tsp (m, k, A);
+	// A = tsp (m, k, A); // Eliminado en PRAC03.c para reutilizar la funcion en MyDGEMMB
 	for (i = 0 ; i < m ; i++) {	// fil
 		for (j = 0 ; j < n ; j++) { // col
 			// C[i][j] = beta * C[i][j];
@@ -89,7 +89,7 @@ double MyDGEMM (int tipo, int m, int n, int k, double alpha, double *A, int lda,
 {
 	double tmp;
 	int i, j, p;
-	A = tspFor (m, k, A);
+	if (tipo == 2) A = tspFor (m, k, A);
 	#pragma omp parallel for private(j, tmp, p)
 	for (i = 0 ; i < m ; i++) {	// fil
 		for (j = 0 ; j < n ; j++) { // col
@@ -127,7 +127,7 @@ double MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int lda
 {
 	double tmp;
 	int i, j, p;
-	A = tspTask (m, k, A);
+	if (tipo == 2) A = tspTask (m, k, A);
 	#pragma omp parallel private (i, j, tmp, p) // ==> El siguiente bloque (single) se ejectua con varios hilos
 	#pragma omp single // ==> Solo un hilo ejecuta el siguiente bloque (for)
 	for (i = 0 ; i < m ; i++) {	// fil
@@ -147,98 +147,28 @@ double MyDGEMMT (int tipo, int m, int n, int k, double alpha, double *A, int lda
 	return 0;
 }
 
-void blockDGEMM (int blk, int ld, double alpha, double *A, double *B, double *C, int blk_column, int blk_row)
-{
-	int i, j, k,
-	    blk_column_start = blk_column * blk * ld,
-	    blk_row_start = blk_row * blk;
-	double tmp;
-	for (i = 0 ; i < blk ; i++) {	// fil
-		for (j = 0 ; j < blk ; j++) { // col
-			tmp = 0.0;
-			for (k = 0 ; k < ld ; k++) { // col A y fil B
-				// tmp += A[i][p] * B[p][i]
-				tmp+=*(A+i*ld+k) * *(B+j*ld+k);
-			}
-			// C[i][j] += alpha * tmp;
-			*(C+j*ld+i) += alpha * tmp;
-		}	
-	}
-	/*
-	for (i = 0 ; i < blk ; i++) // i = idx col 
-	{
-		for (j = 0 ; j < blk ; j++) // j = idx fil 
-		{
-			tmp = 0.0;
-			// Al operar *(C+j+i*ld), uso fila j de A (k es columnas) y columna i de B (k es filas)
-			for (k = 0 ; k < ld ; k++)
-			{
-				// tmp+= *(A+k+i*ld+blk_row_start) * *(B+j+k*ld+blk_column_start); // E+03
-				// tmp+= *(A+i+k*ld+blk_row_start) * *(B+k+j*ld+blk_column_start); // E+03
-				// tmp+= *(A+k+j*ld+blk_row_start) * *(B+i+k*ld+blk_column_start); // E+03
-				// tmp+= *(A+j+k*ld+blk_row_start) * *(B+k+i*ld+blk_column_start); // E+03
-
-				tmp+= *(A+j*ld+k) * *(B+k+i*ld);
-
-				// tmp+= *(A+k+i*ld+blk_column_start) * *(B+j+k*ld+blk_row_start); // E+03
-				// tmp+= *(A+i+k*ld+blk_column_start) * *(B+k+j*ld+blk_row_start); // SIGSEGV
-				// tmp+= *(A+k+j*ld+blk_column_start) * *(B+i+k*ld+blk_row_start); // E+03
-				// tmp+= *(A+j+k*ld+blk_column_start) * *(B+k+i*ld+blk_row_start); // SIGSEGV
-			}
-
-			*(C+j+i*ld) += alpha * tmp;
-		}	
-	}*/
-}
-
 double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc, int blk)
 {
-	int i, j, n_blocks_row = n/blk;
+	int i, j, p;
 	
 	// Escalar
 	for (i = 0 ; i < m*m ; i++)
-		// C[i] = beta * C[i];
 		*(C+i) = beta * *(C+i);
 
+	// Transponer
 	A = tsp (m, k, A);
 
-	for (i = 0 ; i < n_blocks_row ; i++)
+	for (i = 0 ; i < m ; i+=blk)
 	{
-		for (j = 0 ; j < n_blocks_row ; j++)
+		for (j = 0 ; j < n ; j+=blk)
 		{
-			blockDGEMM (blk, ldc, alpha, A+j*blk, B+i*blk*ldc, C+j*blk+i*blk*ldc, i, j);
+			#pragma omp parallel for
+            for (p = 0 ; p < k ; p+=blk) 
+            {
+                MyDGEMM(3, blk, blk, blk, alpha, A+p+i*ldb, lda, B+p+j*ldb, ldb, 1, C+i+j*ldc, ldc);
+            }
 		}
 	}
 	
 	return 0;
 }
-
-/*
-double MyDGEMM(int tipo, int m, int n, int k, double alpha, double *A, int lda, double *B, int ldb, double beta, double *C, int ldc)
-{
-  double timeini, timefin;
-
-  // Lo que el alumno necesite hacer 
-  
-  switch (tipo)
-  {
-    case Normal:
-      timeini=Ctimer();  
-      // llamada a la funcion del alumno normal. Se simula con un timer (sleep)
-      pm(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc); // Original
-      sleep(0.5);
-      timefin=Ctimer()-timeini;  
-      break;
-    case TransA:
-      timeini=Ctimer();  
-      // llamada a la funcion del alumno que trabaja con la transpuesta. Se simula con un timer (sleep)
-      pmTransp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
-      sleep(0.5);
-      timefin=Ctimer()-timeini;
-      break;
-    default:
-      timefin=-10;
-  }
-  return timefin;
-}
-*/
