@@ -37,6 +37,21 @@ beta  = 1.7
 tipo  = 2  # 1 normal, 2 transpuesta de A
 blk   = 10
 
+def run (lib_idx, rept, foo, tipo, m, n, k, alpha, A, lda, B, ldb, beta, F, ldc, blk):
+    secs = time()
+    for j in range(rept[i]):
+      if (lib_idx == 2):
+        TiempC=foo(tipo, m, n, k, alpha, A, lda, B, ldb, beta, F, ldc, blk) # Llamada a foo
+      else:
+        TiempC=foo(tipo, m, n, k, alpha, A, lda, B, ldb, beta, F, ldc) # Llamada a foo
+
+    TIEMPO = (time()- secs)/rept[i]
+    # print(f"IccO0  {m}x{n}x{k} Segundos={TIEMPO:1.5E} (Segundos medidos en C={TiempC:1.5E})")
+    # print(f"Error entre Python y IccO0 {LA.norm(D-F, 'fro'):1.5E}")
+    print(f"{current_foo};IccO0;{m}x{n}x{k};{TIEMPO:1.5E};{LA.norm(D-F, 'fro'):1.5E}")
+
+
+    
 print("foo;Lang/Compiler;Size;Time;Err")
 for lib_idx in range (1, 2, 1):
 
@@ -81,6 +96,7 @@ for lib_idx in range (1, 2, 1):
     B = np.asarray(B, order='F')
 
     F = np.asarray(C, order='F')
+    """
     secs = time()
     for j in range(rept[i]):
       if (lib_idx == 2):
@@ -92,8 +108,12 @@ for lib_idx in range (1, 2, 1):
     # print(f"IccO0  {m}x{n}x{k} Segundos={TIEMPO:1.5E} (Segundos medidos en C={TiempC:1.5E})")
     # print(f"Error entre Python y IccO0 {LA.norm(D-F, 'fro'):1.5E}")
     print(f"{current_foo};IccO0;{m}x{n}x{k};{TIEMPO:1.5E};{LA.norm(D-F, 'fro'):1.5E}")
+    """
+
+    run (lib_idx, rept, IccO0, tipo, m, n, k, alpha, A, m, B, k, beta, F, m, blk)
 
     F = np.asarray(C, order='F')
+    """
     secs = time()
     for j in range(rept[i]):
       if (lib_idx == 2):
@@ -105,3 +125,6 @@ for lib_idx in range (1, 2, 1):
     # print(f"IccO3  {m}x{n}x{k} Segundos={TIEMPO:1.5E} (Segundos medidos en C={TiempC:1.5E})")
     # print(f"Error entre Python y IccO3 {LA.norm(D-F, 'fro'):1.5E}\n")
     print(f"{current_foo};IccO3;{m}x{n}x{k};{TIEMPO:1.5E};{LA.norm(D-F, 'fro'):1.5E}")
+    """
+
+    run (lib_idx, rept, IccO3, tipo, m, n, k, alpha, A, m, B, k, beta, F, m, blk)
