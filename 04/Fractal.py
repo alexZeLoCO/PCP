@@ -98,9 +98,55 @@ def errv (xres, yres, A, B):
 def grabar(vect, xres, yres, output):
     A2D=vect.astype(np.ubyte).reshape(yres,xres) #row-major por defecto
     im=Image.fromarray(A2D)
-    im.save(output)
-    print(f"Grabada imagen como {output}")
+    im.save("imgs/"+output)
+    # print(f"Grabada imagen como {output}")
 
+def run (foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst, dst_b, m_foo, b_foo, f_ref, m_ref, b_ref, compare=False):
+    fract(foo, xmin, ymin, xmax, ymax, maxiter, xres,  yres, nom_dst, dst)
+    err(dst, f_ref, compare)
+
+    grabar(dst, xres, yres, nom_dst+".bmp")
+    dst_b=dst
+
+    m=med(m_foo, xres, yres, dst)
+    err(m, m_ref, compare)
+
+    bina(b_foo, xres, yres, dst_b, m)
+    err(dst_b, b_ref, compare)
+
+    grabar(dst_b, xres, yres, nom_dst+"_b.bmp")
+    print()
+    return [dst, m, dst_b]
+
+def err (src, ref, compare):
+    if (compare):
+    	print(';', str(LA.norm(src-ref)), sep="", end="")
+    else:
+    	print(';', 0, sep="", end="")
+
+def fract (f_foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst):
+    s = time()
+    dst=f_foo(xmin, ymin, xmax, ymax, maxiter, xres, yres, dst)
+    s = time()- s
+    # print(f"mandelPy (alumno)	ha tardado {sPy:1.5E} segundos")
+    print(f"{nom_dst}.bmp;{xmin};{ymin};{xmax};{ymax};{maxiter};{xres};{yres};{s:1.5E}", end="")
+    return dst
+
+def med(m_foo, xres, yres, src):
+    sM = time()
+    promedio=m_foo(xres, yres, src)
+    sM = time()- sM
+    # print(f"Promedio (prof)={promedioProf:1.3E}	ha tardado {sM:1.5E} segundos")
+    print(f";{promedio:1.3E};{sM:1.5E}", sep="", end="")
+    return promedio
+    
+def bina (b_foo, xres, yres, src, m_src):
+    sB = time()
+    b_foo(xres, yres, src, m_src)
+    sB = time()- sB
+    # print(f"Binariza (prof)	ha tardado {sB:1.5E} segundos")
+    print(f";{sB:1.5E}", end="")
+        
 
 #########################################################################
 # 			MAIN						#
@@ -111,13 +157,15 @@ if __name__ == "__main__":
         print('\033[91m'+'USO: main.py <xmin> <xmax> <ymin> <yres> <maxiter> <outputfile>')
         print("Ejemplo: -0.7489 -0.74925 0.1 1024 1000 out.bmp"+'\033[0m')
         sys.exit(2)
+
+    print("out_file;xmin;ymin;xmax;ymax;maxiter;xres;yres;run_time;err;mean;mean_time;mean_err;bin_time;bin_err")
     
     xmin=float(sys.argv[1])
     xmax=float(sys.argv[2])
     ymin=float(sys.argv[3])
     yres=int(sys.argv[4])
     maxiter=int(sys.argv[5])
-    outputfile = sys.argv[6]
+    n_threads = int(sys.argv[6])
     
     #  Cálculo de otras variables necesarias						#
     xres = yres
@@ -128,91 +176,26 @@ if __name__ == "__main__":
     fractalProf = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
     fractalC = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión C
 
-    fractalDiff = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión Diferencias 
-    
-    #  Comienzan las ejecuciones							#
-    print(f'\nCalculando fractal de {yres}x{xres} maxiter:{maxiter}:')
-    
+    fractalPy_b = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión python
+    fractalProf_b = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
+    fractalC_b = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión C
+
+    prof_data = [None, None, None]
+    py_data = [None, None, None]
+    c_data = [None, None, None]
 
 # --------------------------- CALCULOS -----------------------------
-    print("--------------------------- CALCULOS -----------------------------")
-    #  Llamada a la función de cálculo del fractal en python (versión alumnx)	(NO MODIFICAR) #
-    sPy = time()
-    mandelPy(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalPy)
-    sPy = time()- sPy
-    print(f"mandelPy (alumno)	ha tardado {sPy:1.5E} segundos")
-    
+
+# plantilla: def run (foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst, m_foo, b_foo, f_ref, m_ref, b_ref, compare=False):
+
     #  Llamada a la función de cálculo del fractal en C (versión profesor) (NO MODIFICAR) #
-    sC = time()
-    mandelProf(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalProf)
-    sC = time()- sC
-    print(f"mandelC (prof)		ha tardado {sC:1.5E} segundos")
+    prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False)
+
+    #if (xres/n_threads < 1024 and xres < 4096):
+    if (xres < 4096):
+        #  Llamada a la función de cálculo del fractal en python (versión alumnx)	(NO MODIFICAR) #
+        py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True)
     
     #  Llamada a la función de cálculo del fractal en C (versión alumnx). 		#
-    sCa = time()
-    mandel(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalC)
-    sCa = time()- sCa
-    print(f"mandelC (alumno)	ha tardado {sCa:1.5E} segundos")
- 
-    #  DIFFS
-    diffs(xres, yres, fractalProf, fractalPy, fractalDiff)
-
-# --------------------------- ERRORES CALCULOS -----------------------------
-    print("--------------------------- ERRORES CALCULOS -----------------------------")
-    #  Comprobación del error de cálculo del fractal en python (versión alumnx frente a prof) (No MODIFICAR)#
-    print('(Prof v. Py)	El error es '+ str(LA.norm(fractalPy-fractalProf)), " (", errv(xres, yres, fractalPy, fractalProf), ")", sep="")
-   
-    #  Comprobación del error de cálculo del fractal en C (versión alumnx frente a prof)#
-    print('(Prof v. C)	El error es '+ str(LA.norm(fractalC-fractalProf)), " (", errv(xres, yres, fractalC, fractalProf), ")", sep="")
-
-    #  Comprobación del error de cálculo del fractal en C (versión alumnx frente a python)#
-    print('(Py v. C)	El error es '+ str(LA.norm(fractalC-fractalPy)), " (", errv(xres, yres, fractalC, fractalPy), ")", sep="")
-
-# --------------------------- MEDIAS -----------------------------
-    print("--------------------------- MEDIAS -----------------------------")
-    #  Llamada a la función de cálculo de la media (versión profesor) 	(NO MODIFICAR) 	#
-    sM = time()
-    promedioProf=mediaProf(xres, yres, fractalProf)
-    sM = time()- sM
-    print(f"Promedio (prof)={promedioProf:1.3E}	ha tardado {sM:1.5E} segundos")
-    
-    #  Llamada a la función de cálculo de la media en C (versión alumnx)		#
-    sCM = time()
-    promedioC = media(xres, yres, fractalC)
-    sCM = time() - sCM
-    print(f"Promedio (C)={promedioC:1.3E}	ha tardado {sCM:1.5E} segundos")
-    
-# --------------------------- ERRORES MEDIAS -----------------------------
-
-    #  Comprobación del error en el promedio en C (versión alumnx frente a prof)	#
-    print('El error es '+ str(LA.norm(promedioC-promedioProf)))
-
-# --------------------------- BINARIZACION -----------------------------
-    print("--------------------------- BINARIZACION -----------------------------")
-    #  Llamada a la función de cálculo del binarizado (versión profesor) (NO MODIFICAR)	#
-    sB = time()
-    binarizaProf(xres, yres, fractalProf, promedioProf)
-    sB = time()- sB
-    print(f"Binariza (prof)	ha tardado {sB:1.5E} segundos")
-    
-    #  Llamada a la función de cálculo del binarizado en C (versión alumnx)		#
-    sCB = time()
-    binariza(xres, yres, fractalC, promedioC)
-    sCB = time()- sCB
-    print(f"Binariza (C)	ha tardado {sCB:1.5E} segundos")   
-    
- # --------------------------- ERRORES BINARIZACION -----------------------------
-    #  Comprobación del error en el binarizado en C (versión alumnx) 			#
-    print('El error es '+ str(LA.norm(promedioC-promedioProf)))
-    
- # --------------------------- DISCO -----------------------------
-    print("--------------------------- DISCO -----------------------------")
-
-    #  Grabar a archivo	la imagen que se desee (SOLO PARA DEPURAR)			#
-    grabar(fractalPy,xres,yres,"out_py.bmp")
-    grabar(fractalProf,xres,yres,"out_prof.bmp")
-    grabar(fractalC,xres,yres,"out_c.bmp")
-    grabar(fractalDiff,xres,yres,"out_diffs.bmp")
-    
-
-  
+    c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True)
+     

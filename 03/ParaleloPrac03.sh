@@ -23,5 +23,9 @@ if [ ! -x LIBS/PRACIccO3.so ]; then
    exit 1
 fi
 
+# Secuencial
+export OMP_NESTED=false
+export OMP_NUM_THREADS=8
+
 # 3.- Ejecutar el ejemplo
 python PRAC03.py

@@ -1,0 +1,18 @@
+ID;Foo;PC;Secuencial/Paralelo;Nota;Final
+6782;MyDGEMM;Ryzen;Secuencial
+6783;MyDGEMM;I3;Secuencial
+6784;MyDGEMM;Xeon;Secuencial;;+2hs, eliminado
+6786;MyDGEMMB;Ryzen;Secuencial
+6787;MyDGEMMB;Ryzen;Paralelo
+6789;MyDGEMMB;Ryzen;Secuencial
+6790;MyDGEMMB;Ryzen;Paralelo;;Errores +07
+6820;MyDGEMMB;Ryzen;Secuencial;;+1h, eliminado
+6819;MyDGEMMB;Ryzen;Paralelo;;Errores +07
+6835;MyDGEMMB;Ryzen;Paralelo;Paraleliza solo MyDGEMM, export OMP_NESTED=false;Eliminado por falta de make
+6836;MyDGEMM;Xeon;Secuencial;export OMP_NUM_THREADS=1;Fallo en python looping, eliminado
+6839;MyDGEMMB;Ryzen;Paralelo;Paraleliza solo MyDGEMM, export OMP_NESTED=false;Fallo en python looping
+6847;MyDGEMM;Xeon;Secuencial;fixed python looping;Habia seleccionado MyDGEMMB
+6850;MyDGEMMB;Ryzen;Paralelo;fixed python looping;
+6868;MyDGEMM;i3;Paralelo;updated threads;OK
+6869;MyDGEMM;i3;Secuencial;udpated threads;OK
+6879;MyDGEMM;Xeon;Secuencial;cambiado a MyDGEMM;

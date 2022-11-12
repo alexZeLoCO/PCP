@@ -162,7 +162,7 @@ double MyDGEMMB (int tipo, int m, int n, int k, double alpha, double *A, int lda
 	{
 		for (j = 0 ; j < n ; j+=blk)
 		{
-			#pragma omp parallel for
+			// #pragma omp parallel for
             for (p = 0 ; p < k ; p+=blk) 
             {
                 MyDGEMM(3, blk, blk, blk, alpha, A+p+i*ldb, lda, B+p+j*ldb, ldb, 1, C+i+j*ldc, ldc);

@@ -5,6 +5,7 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 	dx = (xmax-xmin)/xres;
 	dy = (ymax-ymin)/yres;
 	int i, j, k;
+	#pragma omp parallel for private(i, j, u, v, k, u_old)
 	for (i = 0 ; i < xres ; i++)
 	{
 		for (j = 0 ; j < yres ; j++)
@@ -19,8 +20,14 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 				v = 2*u_old*v + j*dy+ymin;
 				k++;
 			}
-			if (k >= maxiter)	*(A+j*xres+i) = 0;
-			else	*(A+j*xres+i) = k;
+			if (k >= maxiter)
+			{
+				*(A+j*xres+i) = 0;
+			}
+			else
+			{
+				*(A+j*xres+i) = k;
+			}
 		}
 	}
 }
@@ -29,6 +36,7 @@ double promedio(int xres, int yres, double* A){
 	int i;
 	double s;
 	s = 0;
+	#pragma omp parallel for reduction(+:s)
 	for (i = 0 ; i < xres*yres ; i++)
 		s+=*(A+i);
    return s/(xres*yres);
@@ -36,6 +44,7 @@ double promedio(int xres, int yres, double* A){
 
 void binariza(int xres, int yres, double* A, double med){
 	int i;
+	#pragma omp parallel for
 	for (i = 0 ; i < xres*yres ; i++)
 	{
 		if (*(A+i) >= med)	*(A+i) = 255;
