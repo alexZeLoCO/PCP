@@ -1,15 +1,20 @@
 #include "Prototipos.h"
+#include <omp.h>
 
 void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A){
 	double dx, dy, u, v, u_old;
 	dx = (xmax-xmin)/xres;
 	dy = (ymax-ymin)/yres;
 	int i, j, k;
-	#pragma omp parallel for private(i, j, u, v, k, u_old)
+	// #pragma omp parallel for private(i, j, u, v, k, u_old)
+	#pragma omp parallel private(i, j, u, v, k, u_old)
+	#pragma omp single
 	for (i = 0 ; i < xres ; i++)
 	{
 		for (j = 0 ; j < yres ; j++)
 		{
+			#pragma omp task
+			{
 			u = 0;
 			v = 0;
 			k = 1;
@@ -17,7 +22,7 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 			{
 				u_old = u;
 				u = u_old*u_old - v*v + i*dx+xmin;
-				v = 2*u_old*v + j*dy+ymin;
+				v = 2*u_old<*v + j*dy+ymin;
 				k++;
 			}
 			if (k >= maxiter)
@@ -27,6 +32,7 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 			else
 			{
 				*(A+j*xres+i) = k;
+			}
 			}
 		}
 	}

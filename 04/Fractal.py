@@ -11,6 +11,7 @@ from time import time
 #########################################################################
 # Prepara gestión librería externa de Profesor 	(NO MODIFICAR)		#
 #########################################################################
+"""
 libProf = ctypes.cdll.LoadLibrary('./mandelProf.so')
 # Preparando para el uso de "void mandel(double, double, double, double, int, int, int, double *)"
 # .restype  se refiere al tipo de lo que retorna la funcion. Si es void, valor "None".
@@ -33,7 +34,7 @@ binarizaProf = libProf.binariza
 
 binarizaProf.restype  = None
 binarizaProf.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double]
-
+"""
 
 #########################################################################
 # Preparar gestión librería externa de Alumnx llamada mandelAlumnx.so	#
@@ -173,11 +174,11 @@ if __name__ == "__main__":
 
     #  Reserva de memoria de las imágenes en 1D	(AÑADIR TANTAS COMO SEAN NECESARIAS)	#
     fractalPy = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión python
-    fractalProf = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
+    # fractalProf = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
     fractalC = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión C
 
     fractalPy_b = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión python
-    fractalProf_b = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
+    # fractalProf_b = np.zeros(yres*xres).astype(np.double) #Esta es para el profesor
     fractalC_b = np.zeros(yres*xres).astype(np.double) #Esta es para el alumnado, versión C
 
     prof_data = [None, None, None]
@@ -189,13 +190,12 @@ if __name__ == "__main__":
 # plantilla: def run (foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst, m_foo, b_foo, f_ref, m_ref, b_ref, compare=False):
 
     #  Llamada a la función de cálculo del fractal en C (versión profesor) (NO MODIFICAR) #
-    prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False)
+    # prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False)
 
-    #if (xres/n_threads < 1024 and xres < 4096):
     if (xres < 4096):
         #  Llamada a la función de cálculo del fractal en python (versión alumnx)	(NO MODIFICAR) #
-        py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True)
+        # py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True)
     
     #  Llamada a la función de cálculo del fractal en C (versión alumnx). 		#
-    c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True)
+    c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], False)
      

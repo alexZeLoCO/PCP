@@ -1,7 +1,7 @@
 #! /bin/sh
 
 if [ "$#" -lt "2" ]
-then
+	then
 	echo "USE: p04.sh <n_threads> <res>" >&2
 	exit 1
 else
