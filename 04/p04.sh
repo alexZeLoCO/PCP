@@ -10,4 +10,5 @@ else
 fi
 
 export OMP_NUM_THREADS=$n_thr
-python Fractal.py -0.7489 -0.74925 0.1007 $res 100 $n_thr # | column -t -s ';'
+# python Fractal.py -0.7489 -0.74925 0.1007 $res 100 $n_thr # | column -t -s ';'
+python originalFractal.py "-0.7489" "-0.74925" "0.1007" "$res" "1000" "out.bmp" # | column -t -s ';'

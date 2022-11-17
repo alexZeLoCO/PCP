@@ -1,0 +1,10 @@
+
+Calculando fractal de 512x512 maxiter:100:
+mandelPy		ha tardado 1.40168E+01 segundos
+mandelC (prof)		ha tardado 2.23892E-01 segundos
+El error es 0.0
+mandelC (Alumnx)		ha tardado 2.02887E-01 segundos
+El error es 10111.560067566232
+Promedio (prof)=4.423E+00	ha tardado 9.00030E-04 segundos
+Binariza (prof)		ha tardado 8.45194E-04 segundos
+Grabada imagen como out.bmp

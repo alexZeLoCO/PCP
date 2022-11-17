@@ -69,7 +69,7 @@ def mandelPy(xmin, ymin, xmax, ymax, maxiter, xres, yres, A):
             u = 0
             v = 0
             k = 1
-            while (k < maxiter and u**2+v**2<4):
+            while (k < maxiter and (u**2+v**2)<4):
                 u_old = u
                 u = u_old**2-v**2 + paso_x
                 v = 2*u_old*v  + paso_y
