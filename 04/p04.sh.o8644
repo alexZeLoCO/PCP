@@ -1,0 +1,5 @@
+out_file;xmin;ymin;xmax;ymax;maxiter;xres;yres;run_time;err;mean;mean_time;mean_err;bin_time;bin_err
+Traceback (most recent call last):
+  File "Fractal.py", line 191, in <module>
+    prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False)
+NameError: name 'fractalProf' is not defined

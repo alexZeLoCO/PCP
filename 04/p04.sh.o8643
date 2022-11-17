@@ -1,0 +1,4 @@
+  File "Fractal.py", line 167
+    n_threads = int(sys.argv[6]True)
+                               ^
+SyntaxError: invalid syntax

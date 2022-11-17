@@ -24,3 +24,8 @@ ID;PC;n_thr;res;Nota;Final
 7410;Xeon;8;1024;
 7411;Xeon;8;512;
 7412;Xeon;8;256;
+8642;i3;1;128;;Fallo en indentacion
+8643;i3;1;128;Indentacion Corregida;Hay un True random en una linea
+8644;i3;1;128;True corregido;FractalProf no definido
+8645;i3;1;128;FractalProf corregido;
+8834;i3;1;512;Modificacion paso_x;
