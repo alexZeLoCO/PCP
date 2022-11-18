@@ -1,0 +1,1 @@
+Error reservando memoria en VecAdd1.cu linea 52

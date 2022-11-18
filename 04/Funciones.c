@@ -7,13 +7,13 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 	dy = (ymax-ymin)/yres;
 	int i = 0, j = 0, k = 0;
 	// #pragma omp parallel for private(i, j, u, v, k, u_old)
-	// #pragma omp parallel private(i, j, u, v, k, u_old, paso_x, paso_y)
-	// #pragma omp single
+	#pragma omp parallel private(i, j, u, v, k, u_old, paso_x, paso_y)
+	#pragma omp single
 	for (i = 0 ; i < xres ; i++)
 	{
 		for (j = 0 ; j < yres ; j++)
 		{
-			// #pragma omp task
+			#pragma omp task
 			{
 				paso_x = i*dx+xmin;
 				paso_y = j*dy+ymin;

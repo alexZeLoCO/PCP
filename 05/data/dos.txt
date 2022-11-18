@@ -1,0 +1,3 @@
+El tiempo en la CPU  es 1.9073486E-06 segundos.
+El tiempo del kernel CUDA es 2.3198128E-04 segundos.
+El error es -0.0000000E+00.

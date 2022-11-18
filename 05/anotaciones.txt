@@ -1,0 +1,128 @@
+1.3.
+Al ejecutar la compilacion del paso 3, se muestra un error proveniente de la linea 52.
+En la linea 52 hay una llamada a malloc para un double*.
+El numero de bytes a reservar es n*sizeof(double).  n proviene de *(argv+1), el primer parametro.  El primer parametro en la primera ejecucion es -2000 por lo que esta intentando reservar -2000*sizeof(double), de ahi el error.
+
+1.4.
+Al sustituir el -2000 por un 2000, la ejecucion resulta sin errores.
+Sin embargo, entre los dos calculos, hay un error de 1 aproximadamente.
+
+1.5.
+Al ejecutar la compilacion del paso 5, el programa se detiene con el mensaje:
+"Error 1: No hay GPU con capacidades CUDA".
+Muy seguramente, esto se deba a estar ejecutando el codigo con './' y en esta maquina no hay GPU CUDA.
+
+1.6.
+Al enviar el proceso a uno de los equipos Ryzen, el trabajo retorna con los siguientes datos:
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 2.1269321E-03 segundos.
+El tiempo del kernel CUDA es 6.2601566E-03 segundos.
+El error es 0.0000000E+00.
+Por lo que funciona, pero los tiempos son peores en CUDA que en CPU.
+
+1.7.
+Al ejecutar lo indicado en el paso 7, recibimos unos resultados similares a los de paso 6.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 1.6560555E-03 segundos.
+El tiempo del kernel CUDA es 5.1360130E-03 segundos.
+El error es 0.0000000E+00.
+
+1.8.
+Al susituir en el script los parametros del paso 8, recibimos unos tiempos similares, pero esta vez hay un error de 1.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 2.4909973E-03 segundos.
+El tiempo del kernel CUDA es 6.9689751E-04 segundos.
+El error es 1.0745523E+00.
+El cambio que hemos realizado en el paso 8, ha sido cambiar el segundo parametro de 32 a 2048.
+El segundo parametro corresponde al numero de hilos por bloque (ThPerBlk).
+En esta ejeucion se modifico el numero de hilos por bloque a 2048.
+El maximo numero de hilos por bloque es 1024, por lo que al ordenar 2048, el kernel no se ejecuta.
+
+1.9.
+Al aplicar el resto de cambios en los comentarios "Paso X" y ejecutar, obtenemos lo siguiente: 
+VecAdd1.cu(104): getLastCudaError() CUDA error: (9) invalid configuration argument.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 1.6591549E-03 segundos.
+Se encuentra un error en la linea 104.
+En la linea 104 hay un CUDACHECKLASTERR().
+Este error esta relacionado con los argumentos de configuracion <<<xxx, yyy>> enviados al ejecutar el kernel de la linea 99.
+
+1.10.1.
+Al modificar los parametros obtenemos:
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 6.1988831E-03 segundos.
+El tiempo del kernel CUDA es 6.1249733E-03 segundos.
+El error es 0.0000000E+00.
+Ahora el programa se ejecuta correctamente, el error es 0 y los tiempos son similares.
+Esto se debe a que hemos puesto un numero menor al limite de hilos por bloque. (4)
+
+1.10.2.
+Al incrementar el numero de hilos por bloque, el tiempo se reduce de 6'12E-03 a 2'83E-03 la aceleracion de esta version segunda frente a la anterior es de aproximadamente 2'1634.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU  es 4.7650337E-03 segundos.
+El tiempo del kernel CUDA es 2.8312206E-03 segundos.
+El error es 0.0000000E+00.
+
+2.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 9.5046210E-01 y 9.5040765E-01 segundos.
+El tiempo en la GPU     es 9.3948126E-02 y 9.3945663E-02 segundos.
+El error es 0.0000000E+00.
+El programa utiliza tanto la CPU como la GPU para temporizar el kernel y el algoritmo de la CPU.
+Como es de esperar, ambos tiempos (El medido por la CPU y GPU) son parecidos con una variacion menor que se puede dar por la secuencialidad de iniciar y detener los relojes.
+Respecto a los tiempos de la CPU secuencial frente a los de la GPU paralela, la GPU es una magnitud mas rapida.
+
+3.1.
+VecAdd3.cu(106): getLastCudaError() CUDA error: (9) invalid configuration argument.
+Ajustando para que todo discurra bien n=sqrt(n)*sqrt(n)=9998244
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 9.2425110E-01 segundos.
+El tiempo en la GPU1D   es 9.3934212E-02.
+El error es 0.0000000E+00.
+El programa finaliza con un error de 0, pero ha habido un error en la configuracion de CUDA.
+Los resultados de la GPU2D no salen, esto se debe a la configuracion erronea.
+El maximo numero de hilos para un bloque es 1024, pero si estamos trabajando en 2D, entonces seria la raiz cuadrada de 1024.
+Esto es, el limite de hilos para un trabajo en 2D, seria 32. Como 1024 excede de ese limite hay un error y no se ejecuta.
+
+3.2.
+Ajustando para que todo discurra bien n=sqrt(n)*sqrt(n)=9998244
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 9.1905365E-01 segundos.
+El tiempo en la GPU1D   es 9.3678589E-02.
+El error es 0.0000000E+00.
+El tiempo en la GPU2D   es 9.4326782E-02.
+El error es 0.0000000E+00.
+Al utilizar 32 hilos en lugar de 1024, el programa se eejcuta adecuadamente. Aunque los tiempos de la ejecucion 2D son incluso mayores que los de la 1D.
+
+3.3.
+Ajustando para que todo discurra bien n=sqrt(n)*sqrt(n)=9998244
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 9.2292773E-01 segundos.
+El tiempo en la GPU1D   es 1.4055113E-01.
+El error es 0.0000000E+00.
+El tiempo en la GPU2D   es 9.4884445E-02.
+El error es 0.0000000E+00.
+Al utilizar 16 hilos en lugar de 32, el tiempo de ejecucion de 2D es menor que la 1D. La principal diferencia entre esta ejecucion y la anterior es que en esta estamos utilizando 16 hilos por bloque, lo que resulta en que se utilicen mas bloques.
+
+4.1.
+En esta version, se utiliza cudaHostAlloc() en lugar de malloc. Como consecuencia, tambien su utiliza cudaFreeHost() y cudaHostGetDevicePointer().
+cudaHostAlloc() permite no duplicar datos utilizando un puntero desde la GPU para acceder a los datos de la CPU al coste de tiempo.
+
+4.2.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 1.1272035E+00 segundos.
+El tiempo en la GPU     es 1.2328304E+00 segundos.
+El error es 0.0000000E+00.
+Al utilizar esta version, los tiempos de ejecucion son parecidos en CPU y GPU, si bien algo peores en GPU.
+La reduccion en los tiempos se debe al uso de cudaHostAlloc(), los datos a los que accede la GPU, estan en memoria de la CPU.
+
+5.1.
+En la nueva version, se utiliza cudaMallocManaged() en lugar de cudaHostAlloc() y varios CUDAERR() para comprobar errores.
+En este caso, se utiliza la version de memoria compartida por ambos CPU y GPU. Esto resulta en unos tiempos similares a los anteriores al 4. pero sin duplicidad de datos.
+
+5.2.
+INFO: Hay 1 GPUs con capacidades CUDA, seguimos
+El tiempo en la CPU     es 1.0269614E+00 segundos.
+El tiempo en la GPU     es 1.4477556E-01 segundos.
+El error es 0.0000000E+00.
+Al ejecutar la nueva version, los tiempos de GPU se ven notablemente reducidos.

@@ -151,7 +151,7 @@ if __name__ == "__main__":
     
     #  Llamada a la función de cálculo del fractal en C (versión alumnx). 		#
     sC = time()
-    mandelAlumnx(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalProf)
+    mandelAlumnx(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalAlumnx)
     sC = time()- sC
     print(f"mandelC (Alumnx)		ha tardado {sC:1.5E} segundos")
     
