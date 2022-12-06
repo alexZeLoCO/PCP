@@ -66,6 +66,42 @@ def grabar(vect, xres, yres, nom):
     im=Image.fromarray(A2D)
     im.save(nom)
 
+def fractal(foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th):
+    sC = time()
+    foo(xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
+    sC = time()- sC
+    print(f";{sC:1.5E}")
+    return fract
+
+def err(my, ref, is_comparable):
+    if (is_comparable):
+        print(';',str(LA.norm(my-ref)), sep="", end="")
+    else:
+        print(';0.0')
+
+def avg(foo, xres, yres, frac, th):
+    sP = time()
+    media=foo(xres, yres, frac, th)
+    sP = time()- sP
+    print(f";{media};{sP:1.5E}")
+    return media
+
+def bina(foo, xres, yres, fract, avg, th):
+    sB = time()
+    foo(xres, yres, fract, avg, th)
+    sB = time()- sB
+    print(f";{sB:1.5E}")
+    return fract
+
+def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comprable, th):
+    fract = fractal(foo_mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
+    err(fract, ref_mandel, is_comparable)
+    media = avg(foo_avg, xres,  yres, fract, th)
+    err(media, ref_med, is_comparable)
+    fract_bin = fract
+    my_bin = bina(foo_bin, xres, yres, fract_bin, media, th)
+    err(my_bin, ref_bin, is_comparable)
+    return [fract, media, fract_bin]
 
 #########################################################################
 # 			MAIN						#
@@ -93,8 +129,20 @@ if __name__ == "__main__":
     fractalAlumn = np.zeros(yres*xres).astype(np.double)
     fractalC = np.zeros(yres*xres).astype(np.double)
 
-    
-    print(f'\nEjecutando {yres}x{xres}')
+    fractalAlumn_bin = np.zeros(yres*xres).astype(np.double)
+    fractalC_bin = np.zeros(yres*xres).astype(np.double)
+
+    print(f'xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_binarizado;e_binarizado\n')
+    print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}')
+# def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comprable, th):
+    prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk)
+
+    printf()
+
+    alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
+
+    """
+    # print(f'\nEjecutando {yres}x{xres}')
     
     #  Llamadas a las funciones de cálculo del fractal Prof (NO MODIFICAR)	#
     sC = time()
@@ -107,6 +155,7 @@ if __name__ == "__main__":
     mandelAlumn(xmin, ymin, xmax, ymax, maxiter, xres, yres, fractalAlumn, ThpBlk)
     sC = time()- sC
     print(f"mandelAlumn ha tardado {sC:1.5E} segundos")
+
     
     #  Comprobación de los errores			(NO MODIFICAR)		#
     print('El error es '+ str(LA.norm(fractalAlumn-fractalC)))
@@ -136,6 +185,8 @@ if __name__ == "__main__":
     sB = time()- sB
     print(f"binarizaProfGPU	ha tardado {sB:1.5E} segundos")
     
+
+
     #  Llamadas a las funciones de cálculo del binarizado Alum			#
     sB = time()
     binarizaAlumn(xres, yres, fractalAlumn, mediaAlumn, ThpBlk)
@@ -148,8 +199,4 @@ if __name__ == "__main__":
     #  Grabar a archivos (nunca usar si yres>2048)				#
     grabar(fractalC,xres,yres,"Prof"+outputfile)
     grabar(fractalAlumn,xres,yres,"Alumn"+outputfile)
-
-    
-
-    
-   
+    """
