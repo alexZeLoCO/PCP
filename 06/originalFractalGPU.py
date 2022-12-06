@@ -47,24 +47,6 @@ mandelAlumn = libAlumn.mandelGPU
 mandelAlumn.restype  = None
 mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
-# managed_mandelAlumn
-managed_mandelAlumn = libAlumn.managed_mandelGPU
-
-managed_mandelAlumn.restype  = None
-managed_mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
-
-# pinned_mandelAlumn 
-pinned_mandelAlumn = libAlumn.pinned_mandelGPU
-
-pinned_mandelAlumn.restype  = None
-pinned_mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
-
-# better_pinned_mandelAlumn 
-better_pinned_mandelAlumn = libAlumn.better_pinned_mandelGPU
-
-better_pinned_mandelAlumn.restype  = None
-better_pinned_mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
-
 # Preparando para el uso de "double promedio(int, int, double *)
 mediaAlumn= libAlumn.promedioGPU
 
@@ -83,43 +65,6 @@ def grabar(vect, xres, yres, nom):
     A2D=vect.astype(np.ubyte).reshape(yres,xres) #(filas,columnas)
     im=Image.fromarray(A2D)
     im.save(nom)
-
-def fractal(foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th):
-    sC = time()
-    foo(xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
-    sC = time()- sC
-    print(f";{sC:1.5E}", end="")
-    return fract
-
-def err(my, ref, is_comparable):
-    if (is_comparable):
-        print(';',str(LA.norm(my-ref)), sep="", end="")
-    else:
-        print(';0.0', end="")
-
-def avg(foo, xres, yres, frac, th):
-    sP = time()
-    media=foo(xres, yres, frac, th)
-    sP = time()- sP
-    print(f";{media};{sP:1.5E}", end="")
-    return media
-
-def bina(foo, xres, yres, fract, avg, th):
-    sB = time()
-    foo(xres, yres, fract, avg, th)
-    sB = time()- sB
-    print(f";{sB:1.5E}", end="")
-    return fract
-
-def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
-    fract = fractal(foo_mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
-    err(fract, ref_mandel, is_comparable) # FIXME: Shows error. But not in original.
-    media = avg(foo_avg, xres,  yres, fract, th)
-    err(media, ref_med, is_comparable)
-    fract_bin = fract
-    my_bin = bina(foo_bin, xres, yres, fract_bin, media, th)
-    err(my_bin, ref_bin, is_comparable)
-    return [fract, fract_bin, media]
 
 #########################################################################
 # 			MAIN						#
@@ -143,48 +88,10 @@ if __name__ == "__main__":
     xres = yres
     ymax = ymin+(xmax-xmin)
     
-    reses = [1024, 2048, 4096, 8192, 10240]
+    fractalC = np.zeros(yres*xres).astype(np.double)
+    fractalAlumn = np.zeros(yres*xres).astype(np.double)
 
-    for res in reses:
-
-    	yres = res
-    	xres = yres
-
-    	#  Reserva de memoria de las imágenes en 1D					#
-    	fractalAlumn = np.zeros(yres*xres).astype(np.double)
-    	fractalC = np.zeros(yres*xres).astype(np.double)
-
-    	fractalAlumn_bin = np.zeros(yres*xres).astype(np.double)
-    	fractalC_bin = np.zeros(yres*xres).astype(np.double)
-
-    	print(f'xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_binarizado;e_binarizado')
-
-# def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
-
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk)
-    	print()
-
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
-    	print()
-
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
-    	print()
-
-    	"""
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
-    	print()
-
-    	"""
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(better_pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
-    	print()
-
-    """
-    # print(f'\nEjecutando {yres}x{xres}')
+    print(f'\nEjecutando {yres}x{xres}')
     
     #  Llamadas a las funciones de cálculo del fractal Prof (NO MODIFICAR)	#
     sC = time()
@@ -235,4 +142,3 @@ if __name__ == "__main__":
     	#  Grabar a archivos (nunca usar si yres>2048)				#
         grabar(fractalC,xres,yres,"Prof"+outputfile)
         grabar(fractalAlumn,xres,yres,"Alumn"+outputfile)
-"""

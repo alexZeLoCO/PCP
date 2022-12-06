@@ -54,6 +54,41 @@ extern "C" void mandelGPU(double xmin, double ymin, double xmax, double ymax, in
 	cudaFree(Dev_a);
 }
 
+extern "C" void managed_mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
+{
+	double *Dev_a = NULL;
+  	CUDAERR(cudaMallocManaged((void**)&Dev_a, xres*yres*sizeof(double), cudaMemAttachGlobal));
+	int n_blks = (int) (yres/ThpBlk)+1;
+	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
+	cudaDeviceSynchronize();
+	CHECKLASTERR();
+	CUDAERR(cudaMemcpy(A, Dev_a, xres*yres*sizeof(double), cudaMemcpyDeviceToHost));
+	cudaFree(Dev_a);
+}
+
+extern "C" void pinned_mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
+{
+	double *Dev_a = NULL, *ptr_Dev_a = NULL;
+	CUDAERR(cudaHostAlloc((void**)&Dev_a, xres*yres*sizeof(double), cudaHostAllocMapped));
+	CUDAERR(cudaHostGetDevicePointer((void**) &ptr_Dev_a, (void*)Dev_a, 0));
+	int n_blks = (int) (yres/ThpBlk)+1;
+	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, ptr_Dev_a);
+	cudaDeviceSynchronize();
+	CHECKLASTERR();
+	CUDAERR(cudaMemcpy(A, ptr_Dev_a, xres*yres*sizeof(double), cudaMemcpyDeviceToHost));
+	cudaFree(Dev_a);
+}
+
+extern "C" void better_pinned_mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
+{
+	double *Dev_a = NULL;
+	CUDAERR(cudaHostGetDevicePointer((void**) &Dev_a, (void*)A, 0)); // Invalid arg
+	int n_blks = (int) (yres/ThpBlk)+1;
+	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
+	cudaDeviceSynchronize();
+	CHECKLASTERR();
+}
+
 extern "C" double promedioGPU(int xres, int yres, double* A, int ThpBlk)
 {
 	double avg = 0;
@@ -75,9 +110,10 @@ extern "C" void binarizaGPU(int xres, int yres, double* A, double med, int ThpBl
 	double *Dev_a = NULL;
   	CUDAERR(cudaMalloc((void **)&Dev_a, xres*yres*sizeof(double)));
 	CUDAERR(cudaMemcpy(Dev_a, A, xres*yres*sizeof(double), cudaMemcpyHostToDevice));
-	kernelBinariza<<< ((int)(xres*yres/ThpBlk)) + 1, ThpBlk >>> (xres, yres, Dev_a, med);
+	int n_blks = (int) (yres/ThpBlk)+1;
+	kernelBinariza<<< n_blks, ThpBlk >>> (xres, yres, Dev_a, med);
 	cudaDeviceSynchronize();
-	CHECKLASTERR();
+	CHECKLASTERR(); // Invalid arg on pinned. better_pinned is yet untested
 	CUDAERR(cudaMemcpy(A, Dev_a, xres*yres*sizeof(double), cudaMemcpyDeviceToHost));
 	cudaFree(Dev_a);
 }
