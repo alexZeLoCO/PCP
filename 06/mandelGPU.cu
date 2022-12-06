@@ -75,8 +75,8 @@ extern "C" void pinned_mandelGPU(double xmin, double ymin, double xmax, double y
 	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, ptr_Dev_a);
 	cudaDeviceSynchronize();
 	CHECKLASTERR();
-	CUDAERR(cudaMemcpy(A, ptr_Dev_a, xres*yres*sizeof(double), cudaMemcpyDeviceToHost));
-	cudaFree(Dev_a);
+	CUDAERR(cudaMemcpy(A, Dev_a, xres*yres*sizeof(double), cudaMemcpyDeviceToHost));
+	cudaFreeHost(Dev_a);
 }
 
 extern "C" void better_pinned_mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)

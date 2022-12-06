@@ -111,14 +111,16 @@ def bina(foo, xres, yres, fract, avg, th):
     print(f";{sB:1.5E}", end="")
     return fract
 
-def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
+def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th, file_name):
     fract = fractal(foo_mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
     err(fract, ref_mandel, is_comparable) # FIXME: Shows error. But not in original.
     media = avg(foo_avg, xres,  yres, fract, th)
     err(media, ref_med, is_comparable)
     fract_bin = fract
-    my_bin = bina(foo_bin, xres, yres, fract_bin, media, th)
-    err(my_bin, ref_bin, is_comparable)
+    fract_bin = bina(foo_bin, xres, yres, fract_bin, media, th)
+    err(fract_bin, ref_bin, is_comparable)
+    grabar(fract, xres, yres, "imgs/"+file_name+".bmp")
+    grabar(fract_bin, xres, yres, "imgs/"+file_name+"_bin.bmp")
     return [fract, fract_bin, media]
 
 #########################################################################
@@ -157,31 +159,31 @@ if __name__ == "__main__":
     	fractalAlumn_bin = np.zeros(yres*xres).astype(np.double)
     	fractalC_bin = np.zeros(yres*xres).astype(np.double)
 
-    	print(f'xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_binarizado;e_binarizado')
+    	print(f'alg;xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_binarizado;e_binarizado')
 
 # def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
 
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk)
+    	print(f'prof;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+    	prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "prof")
     	print()
 
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
+    	print(f'device;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+    	alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device")
     	print()
 
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
+    	print(f'unified;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+    	alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "unified")
     	print()
 
-    	"""
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
+    	print(f'pinned;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+    	alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned")
     	print()
 
-    	"""
-    	print(f'{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-    	alumn_data = run(better_pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk)
+    """
+    	print(f'better_pinned;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+    	alumn_data = run(better_pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "better_pinned")
     	print()
+    """
 
     """
     # print(f'\nEjecutando {yres}x{xres}')
