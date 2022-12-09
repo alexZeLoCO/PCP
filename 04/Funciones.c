@@ -27,14 +27,8 @@ void mandel(double xmin, double ymin, double xmax, double ymax, int maxiter, int
 					v = 2*u_old*v + paso_y;
 					k = k + 1;
 				}
-				if (k >= maxiter)
-				{
-					*(A+j*xres+i) = 0;
-				}
-				else
-				{
-					*(A+j*xres+i) = k;
-				}
+				if (k >= maxiter) 	*(A+j*xres+i) = 0;
+				else 			*(A+j*xres+i) = k;
 			}
 		}
 	}
