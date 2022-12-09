@@ -42,8 +42,6 @@ libAlumn = ctypes.cdll.LoadLibrary('./mandelGPU.so')
 # .restype  se refiere al tipo de lo que retorna la funcion. Si es void, valor "None"
 # .argtypes se refiere al tipo de los argumentos de la funcion
 # Hay dos funciones en la librería compartida: mandel(...) y mandelPar(...)
-
-# mandelAlumn
 mandelAlumn = libAlumn.mandelGPU
 
 mandelAlumn.restype  = None
@@ -61,23 +59,11 @@ pinned_mandelAlumn = libAlumn.pinned_mandelGPU
 pinned_mandelAlumn.restype  = None
 pinned_mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
-# mandel2DAlumn
-mandel2DAlumn = libAlumn.mandelGPU2D
+# better_pinned_mandelAlumn 
+better_pinned_mandelAlumn = libAlumn.better_pinned_mandelGPU
 
-mandel2DAlumn.restype  = None
-mandel2DAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
-
-# managed_mandel2DAlumn
-managed_mandel2DAlumn = libAlumn.managed_mandelGPU2D
-
-managed_mandel2DAlumn.restype  = None
-managed_mandel2DAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
-
-# pinned_mandel2DAlumn 
-pinned_mandel2DAlumn = libAlumn.pinned_mandelGPU2D
-
-pinned_mandel2DAlumn.restype  = None
-pinned_mandel2DAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
+better_pinned_mandelAlumn.restype  = None
+better_pinned_mandelAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
 # Preparando para el uso de "double promedio(int, int, double *)
 mediaAlumn= libAlumn.promedioGPU
@@ -90,13 +76,6 @@ binarizaAlumn= libAlumn.binarizaGPU
 
 binarizaAlumn.restype  = None
 binarizaAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double,ctypes.c_int]
-
-# Preparando para el uso de "void binariza2D(int, int, double *)
-binariza2DAlumn= libAlumn.binarizaGPU2D
-
-binariza2DAlumn.restype  = None
-binariza2DAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double,ctypes.c_int]
-
 
 ######################################################################### # 	Función para guardar la imagen a archivo			#
 #########################################################################
@@ -168,9 +147,6 @@ if __name__ == "__main__":
     ymax = ymin+(xmax-xmin)
     
     reses = [1024, 2048, 4096, 8192, 10240]
-    # reses = [512]
-
-    print(f'alg;xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_mandel;t_binarizado;e_binarizado')
 
     for res in reses:
 
@@ -184,9 +160,9 @@ if __name__ == "__main__":
         fractalAlumn_bin = np.zeros(yres*xres).astype(np.double)
         fractalC_bin = np.zeros(yres*xres).astype(np.double)
 
+        print(f'alg;xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_binarizado;e_binarizado')
 
 # def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
-
 
         print(f'prof;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "prof")
@@ -205,20 +181,11 @@ if __name__ == "__main__":
         print()
 
         """
-        print(f'device2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-        alumn_data = run(mandel2DAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device2D")
+        print(f'better_pinned;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+        alumn_data = run(better_pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "better_pinned")
         print()
+
         """
-
-        print(f'unified2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-        alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "unified2D")
-        print()
-
-        print(f'pinned2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-        alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned2D")
-        print()
-
-
     """
     # print(f'\nEjecutando {yres}x{xres}')
     

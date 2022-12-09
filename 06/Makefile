@@ -8,7 +8,7 @@ mandelGPU.o: mandelGPU.cu
 
 mandelGPU: mandelGPU.o
 	# g++ -shared -Wl,-soname,mandelGPU.so -o mandelGPU.so mandelGPU.o -L$(CUDADIR)/lib64 $(libs)
-	 g++ -shared -Wl,-soname,mandelGPU.so -o mandelGPU.so mandelGPU.o -L/opt/cuda/lib64 $(libs)
+	g++ -shared -Wl,-soname,mandelGPU.so -o mandelGPU.so mandelGPU.o -L/opt/cuda/lib64 $(libs)
 	rm -f mandelGPU.o
 
 clean:
