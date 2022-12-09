@@ -1,2 +1,0 @@
-[91mUSO: main.py <xmin> <xmax> <ymin> <yres> <maxiter> <outputfile>
-Ejemplo: -0.7489 -0.74925 0.1 1024 1000 out.bmp[0m

@@ -1,4 +1,0 @@
-  File "Fractal.py", line 200
-    c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], False)
-    ^
-IndentationError: expected an indented block
