@@ -1,4 +1,5 @@
 #include "Prototipos.h"
+#include <omp.h>
 
 int main(int argc, char *argv[])
 {
@@ -73,9 +74,13 @@ int main(int argc, char *argv[])
   cudaEventCreate(&stop);
 
   /* Resuelve el problema en la CPU */
+  /*
   cudaEventRecord(start, 0);
      for (i=1; i<=veces; i++)
-        for (j=0; j<n; j++) Host_s[j] = Host_x[j] + Host_y[j] * Host_y[j]; /* OJO, el resultado es Host_s */
+	#pragma omp parallel for
+        	for (j=0; j<n; j++)
+			Host_s[j] = Host_x[j] + Host_y[j] * Host_y[j]; // OJO, el resultado es Host_s
+  */
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&time, start, stop);
@@ -85,7 +90,7 @@ int main(int argc, char *argv[])
   numBlocks = (n + ThPerBlk - 1) / ThPerBlk;
   cudaEventRecord(start, 0);
      for (i=1; i<=veces; i++)
-        kernel_VecAdd6_1Sh<<<numBlocks, ThPerBlk, ThPerBlk*sizeof(double)>>>(Host_v, Host_x, Host_y, n);
+        kernel6_1Sh<<<numBlocks, ThPerBlk, ThPerBlk*sizeof(double)>>>(Host_v, Host_x, Host_y, n);
   cudaEventRecord(stop, 0);
   cudaEventSynchronize(stop);
   cudaEventElapsedTime(&time, start, stop);
@@ -100,6 +105,8 @@ int main(int argc, char *argv[])
   CUDAERR(cudaFree(Host_v));
   CUDAERR(cudaFree(Host_s));
   /* END NEW */
+
+  printf("Done.");
 
   return 0;
 }

@@ -74,7 +74,7 @@ __global__ void kernel6_1(double *v, const double *x, const double *y, const int
 }
 
 
-__global__ void kernel1Sh(double *v, const double *x, const double *y, const int size)
+__global__ void kernel6_1Sh(double *v, const double *x, const double *y, const int size)
 {
    int tid = blockIdx.x * blockDim.x + threadIdx.x;
 

@@ -44,8 +44,8 @@ double Ctimer(void);
 __global__ void   kernel_VecAdd(double*, const double*, const double*, const int);
 __global__ void kernel_VecAdd1D(double*, const double*, const double*, const int);
 __global__ void kernel_VecAdd2D(double*, const double*, const double*, const int, const int);
-__global__ void kernel_VecAdd6_1(double*, const double*, const double*, const int);
-__global__ void kernel_VecAdd6_1Sh(double*, const double*, const double*, const int);
+__global__ void kernel6_1(double*, const double*, const double*, const int);
+__global__ void kernel6_1Sh(double*, const double*, const double*, const int);
 __global__ void kernel6_2(double*, double*, double*, const int);
 
 
