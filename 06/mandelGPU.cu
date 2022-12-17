@@ -68,6 +68,7 @@ __global__ void kernelBinariza(int xres, int yres, double* A, double med)
 		if (*(A+i) > med) 	*(A+i) = 255;	
 		else			*(A+i) = 0;	
 	}
+	return;
 }
 
 __global__ void kernelBinariza2D(int xres, int yres, double* A, double med)
@@ -80,6 +81,29 @@ __global__ void kernelBinariza2D(int xres, int yres, double* A, double med)
 		if (*(A+i+j*xres) > med) 	*(A+i+j*xres) = 255;	
 		else				*(A+i+j*xres) = 0;	
 	}
+	return;
+}
+
+__global__ void sum (int size, double* A, double* dst)
+{
+	extern __shared__ float shared_data [];
+	int	i = threadIdx.x + blockIdx.x * blockDim.x,
+		j = blockDim.x/2;
+	if (i < size)
+	{
+		*(shared_data+threadIdx.x) = *(A+i);
+		__syncthreads();	
+		while(j != 0)
+		{
+			if (threadIdx.x < j)
+				*(shared_data+threadIdx.x) += *(shared_data+j+threadIdx.x);
+			__syncthreads();
+			j/=2;
+		}
+		if (i == 0)
+			*(dst+blockIdx.x) = *(shared_data);
+	}
+	return;
 }
 
 extern "C" void mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
@@ -204,8 +228,40 @@ extern "C" double promedioGPU(int xres, int yres, double* A, int ThpBlk)
 	cublasDasum(handle, size/sizeof(double), Dev_a, 1, &avg);
 	cublasDestroy(handle);
 
-	CUDAERR(cudaMemcpy(A, Dev_a, size, cudaMemcpyDeviceToHost));
 	cudaFree(Dev_a);
+	return avg/size*sizeof(double);
+}
+
+extern "C" double promedioGPUSum(int xres, int yres, double* A, int ThpBlk)
+{
+	double 	*avg_array,
+		avg = 0.0,
+		*Dev_avg = NULL,
+		*Dev_a = NULL;
+
+	int 	size = xres*yres*sizeof(double),
+		n_blks = (yres+ThpBlk-1)/ThpBlk,
+		size_avg = n_blks*sizeof(double),
+		i;
+
+	avg_array = (double*) malloc (size_avg);
+
+	CUDAERR(cudaMalloc((void**) &Dev_a, size));
+	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
+
+	CUDAERR(cudaMalloc((void**) &Dev_avg, size_avg));
+
+	sum <<< n_blks, ThpBlk, n_blks*sizeof(float) >>> (xres*yres, Dev_a, Dev_avg);
+
+	CHECKLASTERR();
+	CUDAERR(cudaMemcpy(avg_array, Dev_avg, size_avg, cudaMemcpyDeviceToHost));
+
+	cudaFree(Dev_a);
+	cudaFree(Dev_avg);
+
+	for (i = 0 ; i < n_blks ; i++)
+		avg += (double) *(avg_array+i);
+		
 	return avg/size*sizeof(double);
 }
 
@@ -247,3 +303,4 @@ extern "C" void binarizaGPU2D(int xres, int yres, double* A, double med, int Thp
 
 	cudaFree(Dev_a);
 }
+

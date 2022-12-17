@@ -79,31 +79,37 @@ pinned_mandel2DAlumn = libAlumn.pinned_mandelGPU2D
 pinned_mandel2DAlumn.restype  = None
 pinned_mandel2DAlumn.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
-# Preparando para el uso de "double promedio(int, int, double *)
+# Preparando para el uso de "double promedio(int, int, double *, int)
 mediaAlumn= libAlumn.promedioGPU
 
 mediaAlumn.restype  = ctypes.c_double
 mediaAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
-# Preparando para el uso de "void binariza(int, int, double *)
+# Preparando para el uso de "void binariza(int, int, double *, double, double, int)
 binarizaAlumn= libAlumn.binarizaGPU
 
 binarizaAlumn.restype  = None
 binarizaAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double,ctypes.c_int]
 
-# Preparando para el uso de "void binariza2D(int, int, double *)
+# Preparando para el uso de "void binariza2D(int, int, double *, double, int)
 binariza2DAlumn= libAlumn.binarizaGPU2D
 
 binariza2DAlumn.restype  = None
 binariza2DAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double,ctypes.c_int]
 
+# Preparando para el uso de "void promedioGPUSum(int, int, double *, int)
+mediaAlumnSum = libAlumn.promedioGPUSum
+
+mediaAlumnSum.restype  = None
+mediaAlumnSum.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
 ######################################################################### # 	Función para guardar la imagen a archivo			#
 #########################################################################
 def grabar(vect, xres, yres, nom):
-    A2D=vect.astype(np.ubyte).reshape(yres,xres) #(filas,columnas)
-    im=Image.fromarray(A2D)
-    im.save(nom)
+    if (xres <= 1024):
+        A2D=vect.astype(np.ubyte).reshape(yres,xres) #(filas,columnas)
+        im=Image.fromarray(A2D)
+        im.save(nom)
 
 def fractal(foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th):
     sC = time()
@@ -134,7 +140,7 @@ def bina(foo, xres, yres, fract, avg, th):
 
 def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th, file_name):
     fract = fractal(foo_mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract, th)
-    err(fract, ref_mandel, is_comparable) # FIXME: Shows error. But not in original.
+    err(fract, ref_mandel, is_comparable)
     media = avg(foo_avg, xres,  yres, fract, th)
     err(media, ref_med, is_comparable)
     fract_bin = fractal(foo_mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, fract_bin, th)
@@ -188,36 +194,55 @@ if __name__ == "__main__":
 # def run (foo_mandel, xmin, xmax, ymin, ymax, xres, yres, maxiter, fract, foo_avg, foo_bin, fract_bin, ref_mandel, ref_bin, ref_med, is_comparable, th):
 
 
+	# Prof
         print(f'prof;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "prof")
         print()
 
+	# Alumn 1D device 
         print(f'device;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device")
         print()
 
+	# Alumn 1D managed
         print(f'unified;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "unified")
         print()
 
+	# Alumn 1D pinned
         print(f'pinned;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned")
         print()
 
         """
+	# Alumn 2D device
         print(f'device2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandel2DAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device2D")
         print()
         """
 
+	# Alumn 2D managed
         print(f'unified2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(managed_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "unified2D")
         print()
 
+	# Alumn 2D pinned
         print(f'pinned2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned2D")
         print()
 
+        """
+	# Prof + Binariza2D
+        print(f'binariza2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+        alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaProf, binariza2DAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "binariza2D")
+        print()
+        """
+	
+	# Prof + mediaAlumnSum
+        print(f'mediaAlumnSum;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+        alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumnSum, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "mediaAlumnSum")
+        print()
+	
 
     """
     # print(f'\nEjecutando {yres}x{xres}')
