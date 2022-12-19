@@ -54,6 +54,21 @@ binariza = libAlumnx.binariza
 binariza.restype  = None
 binariza.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"), ctypes.c_double]
 
+# Preparando para el uso de "void mandel_schedule_static"
+mandel_schedule_static = libAlumnx.mandel_schedule_static
+mandel_schedule_static.restype = None
+mandel_schedule_static.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
+
+# Preparando para el uso de "void mandel_schedule_dynamic"
+mandel_schedule_dynamic = libAlumnx.mandel_schedule_dynamic
+mandel_schedule_dynamic.restype = None
+mandel_schedule_dynamic.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
+
+# Preparando para el uso de "double media_atomic (int, int, double *)"
+media_atomic = libAlumnx.promedio_atomic
+media_atomic.restype  = ctypes.c_double
+media_atomic.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
+
 #########################################################################
 # Función en Python para resolver el cálculo del fractal		#
 # Codificar el algoritmo que, para los parámetros dados, calcula	#
@@ -116,14 +131,14 @@ def run (foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst, dst_b, 
     err(dst_b, b_ref, compare)
 
     grabar(dst_b, xres, yres, nom_dst+"_b.bmp")
-    print(",", n_threads, sep="")
+    print(";", n_threads, sep="")
     return [dst, m, dst_b]
 
 def err (src, ref, compare):
     if (compare):
     	print(';', str(LA.norm(src-ref)), sep="", end="")
     else:
-    	print(';', 0, sep="", end="")
+    	print(';', 0.0, sep="", end="")
 
 def fract (f_foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst):
     s = time()
@@ -159,7 +174,7 @@ if __name__ == "__main__":
         print("Ejemplo: -0.7489 -0.74925 0.1 1024 1000 out.bmp"+'\033[0m')
         sys.exit(2)
 
-    print("out_file;xmin;ymin;xmax;ymax;maxiter;xres;yres;run_time;err;mean;mean_time;mean_err;bin_time;bin_err")
+    print("out_file;xmin;ymin;xmax;ymax;maxiter;xres;yres;run_time;err;mean;mean_time;mean_err;bin_time;bin_err;n_threads")
     
     xmin=float(sys.argv[1])
     xmax=float(sys.argv[2])
@@ -181,9 +196,10 @@ if __name__ == "__main__":
 
 # plantilla: def run (foo, xmin, ymin, xmax, ymax, maxiter, xres, yres, nom_dst, dst, m_foo, b_foo, f_ref, m_ref, b_ref, compare=False):
 
-    resoluciones = [ 128, 256, 512, 1024, 2048, 4096, 8192 ]
+    reses = [ 256, 512, 1024, 2048, 4096, 8192 ]
+    # reses = [ 256, 512 ]
 
-    for resolucion in resoluciones:
+    for resolucion in reses:
         xres = resolucion
         yres = resolucion
 
@@ -198,10 +214,17 @@ if __name__ == "__main__":
         #  Llamada a la función de cálculo del fractal en C (versión profesor) (NO MODIFICAR) #
         prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False, n_threads)
 
-        if (xres < 4096):
+        # if (xres < 4096):
             #  Llamada a la función de cálculo del fractal en python (versión alumnx)	(NO MODIFICAR) #
-            py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+            # py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
     
         #  Llamada a la función de cálculo del fractal en C (versión alumnx). 		#
-        c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+        c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_tasks", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+
+        c_data=run(mandel_schedule_static, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_static", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+     
+        c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_dynamic", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+
+        c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_media_atomic", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+     
      
