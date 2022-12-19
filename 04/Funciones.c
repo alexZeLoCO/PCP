@@ -104,7 +104,7 @@ double promedio_atomic (int xres, int yres, double* A){
 	double 	s = 0,
 		p_s = 0;
 
-	#pragma omp parallel private(p_s)
+	#pragma omp parallel firstprivate(p_s)
 	{
 		p_s = 0;
 		#pragma omp single
