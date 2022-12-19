@@ -69,6 +69,12 @@ media_atomic = libAlumnx.promedio_atomic
 media_atomic.restype  = ctypes.c_double
 media_atomic.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
 
+# Preparando para el uso de "void mandel_collapse"
+mandel_collapse = libAlumnx.mandel_collapse
+mandel_collapse.restype  = None 
+mandel_collapse.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS")]
+
+
 #########################################################################
 # Función en Python para resolver el cálculo del fractal		#
 # Codificar el algoritmo que, para los parámetros dados, calcula	#
@@ -226,5 +232,8 @@ if __name__ == "__main__":
         c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_dynamic", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
 
         c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_media_atomic", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+
+        c_data=run(mandel_collapse, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_collapse", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+     
      
      
