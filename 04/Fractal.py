@@ -220,20 +220,21 @@ if __name__ == "__main__":
         #  Llamada a la función de cálculo del fractal en C (versión profesor) (NO MODIFICAR) #
         prof_data=run(mandelProf, xmin, ymin, xmax, ymax, maxiter, xres, yres, "prof", fractalProf, fractalProf_b, mediaProf, binarizaProf, prof_data[0], prof_data[1], prof_data[2], False, n_threads)
 
-        if (xres < 4096):
+        if (xres < 4096 and n_threads == 1):
             #  Llamada a la función de cálculo del fractal en python (versión alumnx)	(NO MODIFICAR) #
             py_data=run(mandelPy, xmin, ymin, xmax, ymax, maxiter, xres, yres, "python", fractalPy, fractalPy_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
     
         #  Llamada a la función de cálculo del fractal en C (versión alumnx). 		#
         c_data=run(mandel, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_tasks", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
 
-        c_data=run(mandel_schedule_static, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_static", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+        if (n_threads > 1):	# Para monohilo, todas las funciones C son iguales.
+            c_data=run(mandel_schedule_static, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_static", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
      
-        c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_dynamic", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+            c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_schedule_dynamic", fractalC, fractalC_b, media, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
 
-        c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_media_atomic", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+            c_data=run(mandel_schedule_dynamic, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_media_atomic", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
 
-        c_data=run(mandel_collapse, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_collapse", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
+            c_data=run(mandel_collapse, xmin, ymin, xmax, ymax, maxiter, xres, yres, "c_collapse", fractalC, fractalC_b, media_atomic, binariza, prof_data[0], prof_data[1], prof_data[2], True, n_threads)
      
      
      
