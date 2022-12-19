@@ -100,7 +100,7 @@ binariza2DAlumn.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_doubl
 # Preparando para el uso de "void promedioGPUSum(int, int, double *, int)
 mediaAlumnSum = libAlumn.promedioGPUSum
 
-mediaAlumnSum.restype  = None
+mediaAlumnSum.restype  = ctypes.c_double 
 mediaAlumnSum.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
 ######################################################################### # 	Función para guardar la imagen a archivo			#
@@ -214,12 +214,10 @@ if __name__ == "__main__":
         alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned")
         print()
 
-        """
 	# Alumn 2D device
         print(f'device2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandel2DAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device2D")
         print()
-        """
 
 	# Alumn 2D managed
         print(f'unified2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
@@ -231,12 +229,10 @@ if __name__ == "__main__":
         alumn_data = run(pinned_mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "pinned2D")
         print()
 
-        """
 	# Prof + Binariza2D
         print(f'binariza2D;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaProf, binariza2DAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "binariza2D")
         print()
-        """
 	
 	# Prof + mediaAlumnSum
         print(f'mediaAlumnSum;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")

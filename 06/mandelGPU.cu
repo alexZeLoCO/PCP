@@ -84,15 +84,25 @@ __global__ void kernelBinariza2D(int xres, int yres, double* A, double med)
 	return;
 }
 
-__global__ void sum (int size, double* A, double* dst)
+__global__ void sum_blks (int size, double* A, double* dst)
 {
-	extern __shared__ float shared_data [];
+	extern __shared__ double shared_data [];
 	int	i = threadIdx.x + blockIdx.x * blockDim.x,
 		j = blockDim.x/2;
-	if (i < size)
-	{
-		*(shared_data+threadIdx.x) = *(A+i);
+
+	double tmp = 0.0;
+
+	// if (i < size)
+	// {
+		while (i < size)
+		{
+			tmp += *(A+i);
+			i += blockDim.x * gridDim.x;
+		}
+
+		*(shared_data+threadIdx.x) = tmp;
 		__syncthreads();	
+
 		while(j != 0)
 		{
 			if (threadIdx.x < j)
@@ -100,9 +110,42 @@ __global__ void sum (int size, double* A, double* dst)
 			__syncthreads();
 			j/=2;
 		}
-		if (i == 0)
+
+		if (threadIdx.x == 0)
 			*(dst+blockIdx.x) = *(shared_data);
-	}
+	// }
+	return;
+}
+
+__global__ void sum (double* data, double* dst, int n_blks)
+{
+	extern __shared__ double shared_data [];
+	int	i = threadIdx.x + blockIdx.x * blockDim.x,
+		j = blockDim.x/2,
+		bpt = n_blks / blockDim.x,
+		k;
+
+	double tmp = 0.0;
+
+	// if (i < size)
+	// {
+		for (k = 0 ; k < bpt ; k++)
+			tmp += *(data+bpt*i+k);
+
+		*(shared_data+threadIdx.x) = tmp;
+		__syncthreads();	
+
+		while(j != 0)
+		{
+			if (threadIdx.x < j)
+				*(shared_data+threadIdx.x) += *(shared_data+j+threadIdx.x);
+			__syncthreads();
+			j/=2;
+		}
+
+		if (threadIdx.x == 0)
+			*(dst) = *(shared_data);
+	// }
 	return;
 }
 
@@ -167,7 +210,7 @@ extern "C" void mandelGPU2D(double xmin, double ymin, double xmax, double ymax, 
 	
   	CUDAERR(cudaMalloc((void **)&Dev_a, size));
 
-	kernelMandel <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
+	kernelMandel2D <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
 
 	cudaDeviceSynchronize();
 	CHECKLASTERR();
@@ -185,7 +228,7 @@ extern "C" void managed_mandelGPU2D(double xmin, double ymin, double xmax, doubl
 
   	CUDAERR(cudaMallocManaged((void**)&Dev_a, size, cudaMemAttachGlobal));
 
-	kernelMandel <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
+	kernelMandel2D <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, Dev_a);
 
 	cudaDeviceSynchronize();
 	CHECKLASTERR();
@@ -204,7 +247,7 @@ extern "C" void pinned_mandelGPU2D(double xmin, double ymin, double xmax, double
 	CUDAERR(cudaHostAlloc((void**)&Dev_a, size, cudaHostAllocMapped));
 	CUDAERR(cudaHostGetDevicePointer((void**) &ptr_Dev_a, (void*)Dev_a, 0));
 
-	kernelMandel <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, ptr_Dev_a);
+	kernelMandel2D <<<dim_grid, dim_block>>> (xmin, ymin, xmax,  ymax, maxiter, xres, yres, ptr_Dev_a);
 
 	cudaDeviceSynchronize();
 	CHECKLASTERR();
@@ -234,35 +277,33 @@ extern "C" double promedioGPU(int xres, int yres, double* A, int ThpBlk)
 
 extern "C" double promedioGPUSum(int xres, int yres, double* A, int ThpBlk)
 {
-	double 	*avg_array,
-		avg = 0.0,
+	double 	*avg = NULL,
+		*Dev_blks = NULL,
 		*Dev_avg = NULL,
 		*Dev_a = NULL;
 
 	int 	size = xres*yres*sizeof(double),
-		n_blks = (yres+ThpBlk-1)/ThpBlk,
-		size_avg = n_blks*sizeof(double),
-		i;
+		n_blks = (xres*yres+ThpBlk-1)/ThpBlk;
 
-	avg_array = (double*) malloc (size_avg);
+	avg = (double*) malloc (sizeof(double));
 
-	CUDAERR(cudaMalloc((void**) &Dev_a, size));
+	CUDAERR(cudaMalloc((void**) &Dev_blks, n_blks*sizeof(double)));	// midway
+	CUDAERR(cudaMalloc((void**) &Dev_avg, sizeof(double)));	// dst
+	CUDAERR(cudaMalloc((void**) &Dev_a, size));	// src data
+
 	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
 
-	CUDAERR(cudaMalloc((void**) &Dev_avg, size_avg));
-
-	sum <<< n_blks, ThpBlk, n_blks*sizeof(float) >>> (xres*yres, Dev_a, Dev_avg);
+	sum_blks <<< n_blks, ThpBlk, ThpBlk*sizeof(double) >>> (xres*yres, Dev_a, Dev_blks);
+	sum <<< 1, 1024, 1024*sizeof(double) >>> (Dev_blks, Dev_avg, n_blks);
 
 	CHECKLASTERR();
-	CUDAERR(cudaMemcpy(avg_array, Dev_avg, size_avg, cudaMemcpyDeviceToHost));
+	CUDAERR(cudaMemcpy(avg, Dev_avg, sizeof(double), cudaMemcpyDeviceToHost));
 
+	cudaFree(Dev_blks);
 	cudaFree(Dev_a);
 	cudaFree(Dev_avg);
-
-	for (i = 0 ; i < n_blks ; i++)
-		avg += (double) *(avg_array+i);
 		
-	return avg/size*sizeof(double);
+	return *avg/size*sizeof(double);
 }
 
 extern "C" void binarizaGPU(int xres, int yres, double* A, double med, int ThpBlk)
@@ -294,7 +335,7 @@ extern "C" void binarizaGPU2D(int xres, int yres, double* A, double med, int Thp
   	CUDAERR(cudaMalloc((void **)&Dev_a, size));
 	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
 
-	kernelBinariza<<< dim_grid, dim_block>>> (xres, yres, Dev_a, med);
+	kernelBinariza2D<<< dim_grid, dim_block>>> (xres, yres, Dev_a, med);
 
 	cudaDeviceSynchronize();
 	CHECKLASTERR();
