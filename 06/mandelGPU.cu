@@ -154,7 +154,7 @@ __global__ void sum_atomic (int size, double* data, double* dst)
 	int	i = threadIdx.x + blockIdx.x * blockDim.x;
 
 	if (i < size)
-		atomicAdd(dst, *(data+i));
+		// atomicAdd(dst, *(data+i));
 	
 	return;
 }
