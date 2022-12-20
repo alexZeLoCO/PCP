@@ -159,11 +159,58 @@ __global__ void sum_atomic (int size, double* data, double* dst)
 	return;
 }
 
+extern "C" void mandel_omp (double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, double perc)
+{
+	double dx, dy, u = 0, v = 0, u_old = 0, paso_x, paso_y;
+	dx = (xmax-xmin)/xres;
+	dy = (ymax-ymin)/yres;
+	int i = 0, j = 0, k = 0;
+	#pragma omp parallel for private (i, j, u, v, k, u_old, paso_x, paso_y) schedule(dynamic)
+	for (i = xres*2*(1-perc) ; i < xres ; i++)
+		for (j = 0 ; j < yres ; j++)
+		{
+			paso_x = i*dx+xmin;
+			paso_y = j*dy+ymin;
+			u = 0;
+			v = 0;
+			k = 1;
+			while (k < maxiter && (u*u+v*v) < 4)
+			{
+				u_old = u;
+				u = u_old*u_old - v*v + paso_x;
+				v = 2*u_old*v + paso_y;
+				k = k+1;
+			}
+			if (k >= maxiter)	*(A+j*xres+i) = 0;
+			else			*(A+j*xres+i) = k;
+		}
+	return;	
+}
+
+extern "C" void mandelHetero(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
+{
+	double 	*Dev_a = NULL;
+	int 	size = xres*yres*sizeof(double),
+		n_blks = (int) (yres*0.9+ThpBlk-1)/ThpBlk;
+
+  	CUDAERR(cudaMallocManaged((void **)&Dev_a, size, cudaMemAttachGlobal));
+	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
+
+	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax, ymax, maxiter, xres, yres, Dev_a);
+	mandel_omp(xmin, ymin, xmax, ymax, maxiter, xres, yres, Dev_a, 0.9);
+
+	cudaDeviceSynchronize();
+	CHECKLASTERR();
+
+	CUDAERR(cudaMemcpy(A, Dev_a, size, cudaMemcpyDeviceToHost));
+	cudaFree(Dev_a);
+}
+
 extern "C" void mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
 {
 	double 	*Dev_a = NULL;
 	int 	size = xres*yres*sizeof(double),
-		n_blks = (int) (yres/ThpBlk)+1;
+		n_blks = (int) (yres+ThpBlk-1)/ThpBlk;
 
   	CUDAERR(cudaMalloc((void **)&Dev_a, size));
 
@@ -180,7 +227,7 @@ extern "C" void managed_mandelGPU(double xmin, double ymin, double xmax, double 
 {
 	double 	*Dev_a = NULL;
 	int 	size = xres*yres*sizeof(double),
-		n_blks = (int) (yres/ThpBlk)+1;
+		n_blks = (int) (yres+ThpBlk-1)/ThpBlk;
 
   	CUDAERR(cudaMallocManaged((void**)&Dev_a, size, cudaMemAttachGlobal));
 
