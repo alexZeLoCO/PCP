@@ -103,6 +103,12 @@ mediaAlumnSum = libAlumn.promedioGPUSum
 mediaAlumnSum.restype  = ctypes.c_double 
 mediaAlumnSum.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
 
+# Preparando para el uso de "void promedioGPUAtomic(int, int, double *, int)
+mediaAlumnSumAtomic = libAlumn.promedioGPUAtomic
+
+mediaAlumnSumAtomic.restype  = ctypes.c_double 
+mediaAlumnSumAtomic.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_double, flags="C_CONTIGUOUS"),ctypes.c_int]
+
 ######################################################################### # 	Función para guardar la imagen a archivo			#
 #########################################################################
 def grabar(vect, xres, yres, nom):
@@ -198,6 +204,7 @@ if __name__ == "__main__":
         print(f'prof;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "prof")
         print()
+        """
 
 	# Alumn 1D device 
         print(f'device;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
@@ -234,11 +241,16 @@ if __name__ == "__main__":
         alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaProf, binariza2DAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "binariza2D")
         print()
 	
+        """
 	# Prof + mediaAlumnSum
         print(f'mediaAlumnSum;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumnSum, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "mediaAlumnSum")
         print()
 	
+	# Prof + mediaAlumnSumAtomic
+        print(f'mediaAlumnSumAtomic;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
+        alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumnSumAtomic, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "mediaAlumnSum")
+        print()
 
     """
     # print(f'\nEjecutando {yres}x{xres}')

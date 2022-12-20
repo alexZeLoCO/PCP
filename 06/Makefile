@@ -1,4 +1,4 @@
-cflags=-Xcompiler -fopenmp,-O3,-Wall,-fPIC,-L/opt/cuda/include
+cflags=-Xcompiler -fopenmp,-O3,-Wall,-fPIC,-L/opt/cuda/include --gpu-architecture=compute_61 --gpu-code=sm_61
 libs=-lcublas -lcudart -lgomp
 
 all: cleanall mandelGPU 

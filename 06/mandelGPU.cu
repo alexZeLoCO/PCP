@@ -149,6 +149,16 @@ __global__ void sum (double* data, double* dst, int n_blks)
 	return;
 }
 
+__global__ void sum_atomic (int size, double* data, double* dst)
+{
+	int	i = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (i < size)
+		atomicAdd(dst, *(data+i));
+	
+	return;
+}
+
 extern "C" void mandelGPU(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
 {
 	double 	*Dev_a = NULL;
@@ -300,6 +310,33 @@ extern "C" double promedioGPUSum(int xres, int yres, double* A, int ThpBlk)
 	CUDAERR(cudaMemcpy(avg, Dev_avg, sizeof(double), cudaMemcpyDeviceToHost));
 
 	cudaFree(Dev_blks);
+	cudaFree(Dev_a);
+	cudaFree(Dev_avg);
+		
+	return *avg/size*sizeof(double);
+}
+
+extern "C" double promedioGPUAtomic(int xres, int yres, double* A, int ThpBlk)
+{
+	double 	*avg = NULL,
+		*Dev_a = NULL,
+		*Dev_avg = NULL;
+
+	int 	size = xres*yres*sizeof(double),
+		n_blks = (xres*yres+ThpBlk-1)/ThpBlk;
+
+	avg = (double*) malloc (sizeof(double));
+
+	CUDAERR(cudaMalloc((void**) &Dev_avg, sizeof(double)));	// dst
+	CUDAERR(cudaMalloc((void**) &Dev_a, size));	// src data
+
+	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
+
+	sum_atomic <<< n_blks, ThpBlk >>> (xres*yres, Dev_a, Dev_avg);
+
+	CHECKLASTERR();
+	CUDAERR(cudaMemcpy(avg, Dev_avg, sizeof(double), cudaMemcpyDeviceToHost));
+
 	cudaFree(Dev_a);
 	cudaFree(Dev_avg);
 		
