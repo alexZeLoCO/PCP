@@ -118,7 +118,7 @@ mediaAlumnSumAtomic.argtypes = [ctypes.c_int, ctypes.c_int, ndpointer(ctypes.c_d
 ######################################################################### # 	Función para guardar la imagen a archivo			#
 #########################################################################
 def grabar(vect, xres, yres, nom):
-    if (xres <= 1024):
+    #if (xres <= 1024):
         A2D=vect.astype(np.ubyte).reshape(yres,xres) #(filas,columnas)
         im=Image.fromarray(A2D)
         im.save(nom)
@@ -181,6 +181,7 @@ if __name__ == "__main__":
     outPy="py"+outputfile
     xmin=float(sys.argv[1])
     xmax=float(sys.argv[2])
+    # ymin=float(sys.argv[3])
     ymin=float(sys.argv[3])
     yres=int(sys.argv[4])
     maxiter=int(sys.argv[5])
@@ -188,17 +189,19 @@ if __name__ == "__main__":
     
     #  Cálculo de otras variables necesarias					#
     xres = yres
+    # ymax = ymin+(xmax-xmin)
     ymax = ymin+(xmax-xmin)
     
-    reses = [1024, 2048, 4096, 8192, 10240]
-    # reses = [1024]
+    # reses = [1024, 2048, 4096, 8192, 10240]
+    reses = [1024]
+
 
     print(f'alg;xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_mandel;t_binarizado;e_binarizado')
 
     for res in reses:
 
-        yres = res
-        xres = yres
+        yres = res 
+        xres = res 
 
         #  Reserva de memoria de las imágenes en 1D					#
         fractalAlumn = np.zeros(yres*xres).astype(np.double)
@@ -215,9 +218,10 @@ if __name__ == "__main__":
 
 	# Prof
         print(f'prof;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
-        prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "prof")
+        prof_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalC, mediaProf, binarizaProf, fractalC_bin, None, None, None, False, ThpBlk, "wallpaper")
         print()
 
+    """
     # Hetero 
         print(f'hetero;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandelHetero, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaProf, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "hetero")
@@ -270,6 +274,7 @@ if __name__ == "__main__":
         alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumnSumAtomic, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "mediaAlumnSumAtomic")
         print()
 
+    """
     """
     # print(f'\nEjecutando {yres}x{xres}')
     
