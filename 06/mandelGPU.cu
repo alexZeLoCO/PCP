@@ -166,7 +166,7 @@ extern "C" void mandel_omp (double xmin, double ymin, double xmax, double ymax, 
 	dy = (ymax-ymin)/yres;
 	int i = 0, j = 0, k = 0;
 	#pragma omp parallel for private (i, j, u, v, k, u_old, paso_x, paso_y) schedule(dynamic)
-	for (i = xres*2*(1-perc) ; i < xres ; i++)
+	for (i = xres*perc ; i < xres ; i++)
 		for (j = 0 ; j < yres ; j++)
 		{
 			paso_x = i*dx+xmin;
@@ -191,13 +191,14 @@ extern "C" void mandelHetero(double xmin, double ymin, double xmax, double ymax,
 {
 	double 	*Dev_a = NULL;
 	int 	size = xres*yres*sizeof(double),
-		n_blks = (int) (yres*0.9+ThpBlk-1)/ThpBlk;
+		perc_gpu = 0,
+		n_blks = (int) (yres*perc_gpu+ThpBlk-1)/ThpBlk;
 
   	CUDAERR(cudaMallocManaged((void **)&Dev_a, size, cudaMemAttachGlobal));
 	CUDAERR(cudaMemcpy(Dev_a, A, size, cudaMemcpyHostToDevice));
 
 	kernelMandel <<<n_blks, ThpBlk>>> (xmin, ymin, xmax, ymax, maxiter, xres, yres, Dev_a);
-	mandel_omp(xmin, ymin, xmax, ymax, maxiter, xres, yres, Dev_a, 0.9);
+	mandel_omp(xmin, ymin, xmax, ymax, maxiter, xres, yres, Dev_a, perc_gpu);
 
 	cudaDeviceSynchronize();
 	CHECKLASTERR();

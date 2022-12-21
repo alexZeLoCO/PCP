@@ -190,8 +190,8 @@ if __name__ == "__main__":
     xres = yres
     ymax = ymin+(xmax-xmin)
     
-    # reses = [1024, 2048, 4096, 8192, 10240]
-    reses = [1024]
+    reses = [1024, 2048, 4096, 8192, 10240]
+    # reses = [1024]
 
     print(f'alg;xmin;xmax;ymin;ymax;xres;yres;maxiter;ThpBlk;outfile;t_mandel;e_mandel;media;t_media;e_media;t_mandel;t_binarizado;e_binarizado')
 
@@ -225,7 +225,6 @@ if __name__ == "__main__":
 
         grabar(diffs(xres*yres, prof_data[0], alumn_data[0], dst), xres, yres, "imgs/diff.bmp");
 
-    """
 	# Alumn 1D device 
         print(f'device;{xmin};{xmax};{ymin};{ymax};{xres};{yres};{maxiter};{ThpBlk};{outputfile}', end="")
         alumn_data = run(mandelAlumn, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumn, binarizaAlumn, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "device")
@@ -271,7 +270,6 @@ if __name__ == "__main__":
         alumn_data = run(mandelProf, xmin, xmax, ymin, ymax, xres, yres, maxiter, fractalAlumn, mediaAlumnSumAtomic, binarizaProf, fractalAlumn_bin, prof_data[0], prof_data[1], prof_data[2], True, ThpBlk, "mediaAlumnSumAtomic")
         print()
 
-    """
     """
     # print(f'\nEjecutando {yres}x{xres}')
     
