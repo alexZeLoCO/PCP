@@ -190,7 +190,7 @@ extern "C" void mandel_omp (double xmin, double ymin, double xmax, double ymax, 
 extern "C" void mandelHetero(double xmin, double ymin, double xmax, double ymax, int maxiter, int xres, int yres, double* A, int ThpBlk)
 {
 	double 	*Dev_a = NULL,
-		perc_gpu = 0.9;
+		perc_gpu = 0.2;
 	int 	size = xres*yres*sizeof(double),
 		n_blks = (int) (yres*perc_gpu+ThpBlk-1)/ThpBlk;
 
